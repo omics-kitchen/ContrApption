@@ -6,7 +6,7 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
-  // TODO: define shared variables for this instance
+    // create blank plot in global scope
     var plot = Plotly.plot(
       graphDi = el,
       data = [],
@@ -18,12 +18,8 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(inputs) {
-
-        console.log("renderValue called!!!!!");
-
-        // TODO: code to render the widget, e.g.
-        // el.innerText = inputs.message;
-        // console.log(inputs.x)
+        
+        // update the base plot with R inputs
         Plotly.react(
             graphDi = el,
             data = [{
