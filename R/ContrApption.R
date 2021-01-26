@@ -5,18 +5,19 @@
 #' @import htmlwidgets
 #'
 #' @export
-ContrApption <- function(message, message2, width = NULL, height = NULL, elementId = NULL) {
+ContrApption <- function(message, x, y, width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
-  x = list(
+  inputs = list(
     message = message,
-    message2 = message2
+    x = x,
+    y = y
   )
 
   # create widget
   htmlwidgets::createWidget(
     name = 'ContrApption',
-    x,
+    inputs,
     width = width,
     height = height,
     package = 'ContrApption',

@@ -6,32 +6,34 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
-    // TODO: define shared variables for this instance
-      let plot = Plotly.plot(
-        el,[{
-          x: [1, 2, 3, 4, 5],
-          y: [1, 2, 4, 8, 16]
-        }],
-        {
-          margin: { t: 0 }
-        },
-      );
+  // TODO: define shared variables for this instance
+    var plot = Plotly.plot(
+      graphDi = el,
+      data = [],
+      layout = {
+        margin: { t: 0 }
+      },
+    );
 
     return {
 
-
-      initialize: function(){
-        console.log("init called");
-      },
-
-      renderValue: function(x) {
+      renderValue: function(inputs) {
 
         console.log("renderValue called!!!!!");
 
         // TODO: code to render the widget, e.g.
-        // el.innerText = x.message;
-        console.log(x.message)
-        console.log(plot)
+        // el.innerText = inputs.message;
+        // console.log(inputs.x)
+        Plotly.react(
+            graphDi = el,
+            data = [{
+              x: inputs.x,
+              y: inputs.y
+            }],
+            layout = {
+              margin: { t: 0 }
+            },
+          );
       },
 
       resize: function(width, height) {
@@ -39,10 +41,7 @@ HTMLWidgets.widget({
         // TODO: code to re-render the widget with a new size
 
       },
-
-      plot: plot
-      
+      plot: plot 
     };
   }
-
 });

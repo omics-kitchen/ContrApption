@@ -5,6 +5,11 @@
 ```{R}
 
 # devtools::install(); library(ContrApption); ContrApption("test"), x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
-# devtools::install(); library(ContrApption); ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
-devtools::install(); library(ContrApption); ContrApption("test", "test2").plot
+devtools::install(); library(ContrApption); ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
+# devtools::install(); library(ContrApption); ContrApption("test", "test2")
+```
+
+```{R}
+
+ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 32))
 ```
