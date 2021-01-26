@@ -3,15 +3,32 @@
 #' <Add Description>
 #'
 #' @import htmlwidgets
-#'
+#' @import DESeq2
 #' @export
-ContrApption <- function(message, x, y, width = NULL, height = NULL, elementId = NULL) {
+ContrApption <- function(
+  message, # for debug
+  x, # for plotly debug plot
+  y, # for plotly debug plot
+  dds = NULL, # DESeq2 object
+  groupIndex, # the column in the sample sheet that denotes the group statuses
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+  ) {
 
   # forward options using x
+  genes <- rownames(dds)
+  counts <- counts(dds, normalized = TRUE) %>% data.frame
+  
+
   inputs = list(
     message = message,
     x = x,
-    y = y
+    y = y,
+    counts = counts[1:100, ],
+    samples = colData(dds),
+    groupIndex = groupIndex
+
   )
 
   # create widget

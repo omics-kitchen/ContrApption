@@ -7,6 +7,18 @@ devtools::install(); library(ContrApption); ContrApption("test", x = c(1, 2, 3, 
 ```
 
 ```{R}
-
-ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 32))
+library(DESeq2)
+dds <- readRDS("dev/lncDESeq2Obj.Rds")
 ```
+
+```{R}
+
+devtools::install(); library(ContrApption); ContrApption("test",
+                                                         x = c(1, 2, 3, 4, 5),
+                                                         y = c(1, 2, 4, 8, 16), 
+                                                         dds = dds,
+                                                         groupIndex = 8
+                                                         
+                                                         )
+```
+

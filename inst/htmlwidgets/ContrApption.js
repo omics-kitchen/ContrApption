@@ -21,15 +21,19 @@ HTMLWidgets.widget({
         
         // update the base plot with R inputs
         Plotly.react(
-            graphDi = el,
-            data = [{
-              x: inputs.x,
-              y: inputs.y
-            }],
-            layout = {
-              margin: { t: 0 }
-            },
-          );
+          graphDi = el,
+          data = [{
+            x: inputs.x,
+            y: inputs.y
+          }],
+          layout = {
+            margin: { t: 0 }
+          },
+        );
+
+        
+        console.log("render")
+        console.log(inputs.counts)
       },
 
       resize: function(width, height) {
@@ -37,7 +41,10 @@ HTMLWidgets.widget({
         // TODO: code to re-render the widget with a new size
 
       },
-      plot: plot 
-    };
-  }
+
+      // advised by docs, not sure how I'd use it
+      plot: plot
+
+    }; // return 
+  } // factory
 });
