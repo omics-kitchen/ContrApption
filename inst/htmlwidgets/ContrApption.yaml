@@ -1,0 +1,5 @@
+dependencies:
+ - name: plotly
+   version: 1.2.0
+   src: "htmlwidgets/lib/plotly-1.2.0"
+   script: plotly.min.js
