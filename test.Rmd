@@ -2,7 +2,7 @@
 ```{R}
 
 # devtools::install(); library(ContrApption); ContrApption("test"), x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
-devtools::install(); library(ContrApption); ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
+# devtools::install(); library(ContrApption); ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
 # devtools::install(); library(ContrApption); ContrApption("test", "test2")
 ```
 
@@ -13,12 +13,12 @@ dds <- readRDS("dev/lncDESeq2Obj.Rds")
 
 ```{R}
 
+# doesn't work in the chunks for some reason
 devtools::install(); library(ContrApption); ContrApption("test",
                                                          x = c(1, 2, 3, 4, 5),
                                                          y = c(1, 2, 4, 8, 16), 
                                                          dds = dds,
-                                                         groupIndex = 8
-                                                         
-                                                         )
+                                                         idCol = "SampleID",
+                                                         groupCol = "Group")
 ```
 

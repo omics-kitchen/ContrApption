@@ -18,6 +18,21 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(inputs) {
+
+        function mapSamplesToGroups(samples, idCol, groupCol){
+
+          let stateMap = {};
+          let listData = samples.listData;
+
+          for(let i = 0; i < samples.nrows; i++){
+            let group = listData[groupCol][i]
+            let sample = listData[idCol][i]
+            stateMap[sample] = group
+          }
+
+          console.log(stateMap);
+
+        }
         
         // update the base plot with R inputs
         Plotly.react(
@@ -32,9 +47,11 @@ HTMLWidgets.widget({
         );
 
         
-        console.log("render")
-        console.log(inputs.counts)
-      },
+        // console.log("render")
+        // console.log(inputs.counts)
+ 
+        mapSamplesToGroups(inputs.samples, inputs.idCol, inputs.groupCol)
+      }, // renderValue
 
       resize: function(width, height) {
 
