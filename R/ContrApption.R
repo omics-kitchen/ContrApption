@@ -20,13 +20,15 @@ ContrApption <- function(
   # forward options using x
   genes <- rownames(dds)
   counts <- counts(dds, normalized = TRUE) %>% data.frame
-  
+  counts <- counts[1:100, ]
+  genes <- rownames(counts)
 
   inputs = list(
     message = message,
     x = x,
     y = y,
-    counts = counts[1:100, ],
+    counts = counts,
+    genes = genes,
     samples = colData(dds),
     idCol = idCol,
     groupCol = groupCol
