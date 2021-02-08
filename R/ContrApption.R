@@ -3,33 +3,25 @@
 #' <Add Description>
 #'
 #' @import htmlwidgets
-#' @import DESeq2
+#' @import dplyr
 #' @export
 ContrApption <- function(
   message, # for debug
-  x, # for plotly debug plot
-  y, # for plotly debug plot
-  dds = NULL, # DESeq2 object
-  idCol,
-  groupCol, # the column in the sample sheet that denotes the group statuses
+  data, # dataset to visualize
+  annotation, # metadata on the columns showing which belongs to which group
+  idCol, # the column name where the samples IDs are store
+  groupCol, # the column in the sample sheet that denotes the group statuses, what is being studied with the plot
   width = NULL,
   height = NULL,
   elementId = NULL
   ) {
 
-  # forward options using x
-  genes <- rownames(dds)
-  counts <- counts(dds, normalized = TRUE) %>% data.frame
-  counts <- counts[1:100, ]
-  genes <- rownames(counts)
+  print(head(data))
 
   inputs = list(
     message = message,
-    x = x,
-    y = y,
-    counts = counts,
-    genes = genes,
-    samples = colData(dds),
+    data = data[1:100, ],
+    annotation = annotation,
     idCol = idCol,
     groupCol = groupCol
   )

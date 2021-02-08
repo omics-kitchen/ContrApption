@@ -8,17 +8,44 @@
 
 ```{R}
 library(DESeq2)
+library(dplyr)
 dds <- readRDS("dev/lncDESeq2Obj.Rds")
+```
+```{R}
+
+d <- counts(dds, normalized = TRUE)
+d %>% head
 ```
 
 ```{R}
 
-# doesn't work in the chunks for some reason
-devtools::install(); library(ContrApption); ContrApption("test",
+annotation <- colData(dds)
+annotation
+```
+
+```{R}
+
+d <- d %>% data.frame
+d
+
+d$gene <- rownames(d)
+
+d
+```
+
+```{R}
+
+devtools::install(); library(ContrApption); ContrApption("test",data = d,annotation = annotation,idCol = "SampleID",groupCol = "Group")
+```
+
+```{R}
+
+library(ContrApption)
+ContrApption("test",
                                                          x = c(1, 2, 3, 4, 5),
-                                                         y = c(1, 2, 4, 8, 16), 
-                                                         dds = dds,
+                                                         y = c(1, 2, 4, 8, 16),
+                                                         data = d,
+                                                         annotation = annotation,
                                                          idCol = "SampleID",
                                                          groupCol = "Group")
 ```
-

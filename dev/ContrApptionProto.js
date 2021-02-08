@@ -52,7 +52,6 @@ function cleanCounts(dCounts){
 
 async function drawBoxplot() {
 
-
   let dSamples = await require("./SamplesUsed.json");
   let dCounts = await require("./NormalizedCounts.json");
   
