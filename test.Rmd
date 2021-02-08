@@ -35,7 +35,7 @@ d
 
 ```{R}
 
-devtools::install(); library(ContrApption); ContrApption("test",data = d,annotation = annotation,idCol = "SampleID",groupCol = "Group")
+devtools::install(); library(ContrApption); ContrApption("test", data = d, annotation = annotation, idCol = "SampleID", groupCol = "Group")
 ```
 
 ```{R}

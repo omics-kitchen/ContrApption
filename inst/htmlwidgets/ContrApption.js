@@ -108,13 +108,21 @@ HTMLWidgets.widget({
         let filteredData = filterDataByGroupAndGene(dataSet, initialGene, stateMap)
         let plotlyData = formatDataForPlotly(filteredData);
 
-        // let select = d3
-        //   .select(el)
-        //   .append("div")
-        //   .attr("id", "d3-dropdown")
-        //   // .style("width", 50)
-        //   .append("select")
-        //   .text(function(d) { return d})
+        console.log(dataSet['gene'])
+        let dropDown = d3
+          .select(el)
+          .append("div")
+          .attr("id", "d3-dropdown")
+          // .style("width", 50)
+          .append("select")
+
+        dropDown
+          .selectAll("option")
+          .data(dataSet['gene'])
+          .enter()
+          .append("option")
+          .attr("value", function (d) { return d; })
+          .text(function (d) { return d; });
 
         Plotly.react(
           graphDi = el,
