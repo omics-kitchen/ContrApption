@@ -1,0 +1,87 @@
+---
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Dependencies
+
+```{r setup}
+library(ContrApption)
+library(DESeq2)
+library(pasilla)
+library(dplyr)
+```
+
+## Dataset
+
+### Counts
+
+```{R}
+
+# loads counts file from the pasilla package 
+pasCts <- system.file("extdata", "pasilla_gene_counts.tsv", package = "pasilla", mustWork = TRUE)
+
+# reads counts of genes as a matrix
+cts <- as.matrix(read.csv(pasCts, sep = "\t", row.names = "gene_id")) %>% data.frame
+
+cts %>% head
+```
+
+### Annotation
+
+```{R}
+
+# loads sample annotation from the pasilla package
+pasAnno <- system.file("extdata", "pasilla_sample_annotation.csv", package = "pasilla", mustWork = TRUE)
+
+# read in the sample data
+coldata <- read.csv(pasAnno, row.names = 1)
+
+# select relevant columns
+coldata <- coldata[ , c("condition","type")] %>% data.frame
+
+# remove un-needed characters
+rownames(coldata) <- gsub("fb", "", rownames(coldata))
+
+coldata
+```
+
+## Examples
+
+### Two-factor Examples
+
+```{R}
+
+ContrApption(data = cts, annotation = coldata, groupCol = "condition")
+```
+
+```{R}
+
+ContrApption(data = cts, annotation = coldata, groupCol = "type")
+```
+
+### Interaction-style example
+
+```{R}
+
+# derive a new variable - every combitation of condition and type
+coldata$interaction <- paste0(coldata$condition, ":", coldata$type)
+
+coldata %>% head
+```
+
+```{R}
+
+ContrApption(data = cts, annotation = coldata, groupCol = "interaction")
+```

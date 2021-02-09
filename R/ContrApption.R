@@ -8,7 +8,6 @@
 ContrApption <- function(
   data, # dataset to visualize
   annotation, # metadata on the columns showing which belongs to which group
-  idCol, # the column name where the samples IDs are store
   groupCol, # the column in the sample sheet that denotes the group statuses, what is being studied with the plot
   width = NULL,
   height = NULL,
@@ -20,12 +19,14 @@ ContrApption <- function(
   # make the gene name column
   data <- data %>% data.frame
   data$gene <- rownames(data)
-  
+
+  annotation <- annotation %>% data.frame
+  annotation$sampleID <- rownames(annotation)
+
   inputs = list(
     message = message,
     data = data,
     annotation = annotation,
-    idCol = idCol,
     groupCol = groupCol
   )
 

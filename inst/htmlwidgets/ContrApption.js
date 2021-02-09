@@ -30,13 +30,14 @@ HTMLWidgets.widget({
 
           // the actual map of samples to their group state
           let stateMap = {};
-          let listData = annotation.listData;
-
-          // for every state the group can be in the sample sheet...
-          for(let i = 0; i < annotation.nrows; i++){
-            let group = listData[groupCol][i];
-            let sample = listData[idCol][i];
-            // map the current ID to that state
+          
+          // for every i in 0 -> the sample length
+          for(let i = 0; i < annotation.sampleID.length; i++){
+            // the sample is the value of sampleID there
+            let sample = annotation.sampleID[i];
+            // the group of that sample is the value of the groupcol at i
+            let group = annotation[groupCol][i];
+            // map the current ID to that group state
             stateMap[sample] = group;
             // add it to the list if we haven't seen it yet
             if(!statesObserved.includes(group)) {
@@ -46,7 +47,6 @@ HTMLWidgets.widget({
           // return the list of possible states and the map IDs to states
           return {states: statesObserved, map: stateMap};
         }
-
 
         // filters data to gene of interest while preserving groups
         function filterGroupDataByGene(d, gene, sampleMetadata){
@@ -120,7 +120,6 @@ HTMLWidgets.widget({
         let annotation = inputs.annotation;
         let idCol = inputs.idCol;
         let groupCol = inputs.groupCol;
-
 
         /* get initial data and create initial plot */
 
