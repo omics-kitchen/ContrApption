@@ -15,7 +15,7 @@ ContrApption <- function(
   elementId = NULL,
   log2 = FALSE, # TODO
   plotName = NULL # TODO
-  ) {
+) {
 
   # make the gene name column
   data <- data %>% data.frame
