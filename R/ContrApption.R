@@ -6,21 +6,24 @@
 #' @import dplyr
 #' @export
 ContrApption <- function(
-  message, # for debug
   data, # dataset to visualize
   annotation, # metadata on the columns showing which belongs to which group
   idCol, # the column name where the samples IDs are store
   groupCol, # the column in the sample sheet that denotes the group statuses, what is being studied with the plot
   width = NULL,
   height = NULL,
-  elementId = NULL
+  elementId = NULL,
+  log2 = FALSE, # TODO
+  plotName = NULL # TODO
   ) {
 
-  print(head(data))
-
+  # make the gene name column
+  data <- data %>% data.frame
+  data$gene <- rownames(data)
+  
   inputs = list(
     message = message,
-    data = data[1:100, ],
+    data = data,
     annotation = annotation,
     idCol = idCol,
     groupCol = groupCol

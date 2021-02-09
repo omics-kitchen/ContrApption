@@ -1,16 +1,17 @@
 
-```{R}
-
-# devtools::install(); library(ContrApption); ContrApption("test"), x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
-# devtools::install(); library(ContrApption); ContrApption("test", x = c(1, 2, 3, 4, 5), y = c(1, 2, 4, 8, 16))
-# devtools::install(); library(ContrApption); ContrApption("test", "test2")
-```
 
 ```{R}
+
 library(DESeq2)
 library(dplyr)
+library(ContrApption)
+```
+
+```{R}
+
 dds <- readRDS("dev/lncDESeq2Obj.Rds")
 ```
+
 ```{R}
 
 d <- counts(dds, normalized = TRUE)
@@ -23,29 +24,25 @@ annotation <- colData(dds)
 annotation
 ```
 
-```{R}
-
-d <- d %>% data.frame
-d
-
-d$gene <- rownames(d)
-
-d
+```{R eval=FALSE, include=FALSE}
+# console command (for dev)
+# devtools::install(); library(ContrApption); ContrApption("test", data = d, annotation = annotation, idCol = "SampleID", groupCol = "Group")
 ```
+
+## Group
 
 ```{R}
 
-devtools::install(); library(ContrApption); ContrApption("test", data = d, annotation = annotation, idCol = "SampleID", groupCol = "Group")
+ContrApption(data = d, annotation = annotation, idCol = "SampleID", groupCol = "Group")
 ```
+
+## Visit
 
 ```{R}
-
-library(ContrApption)
-ContrApption("test",
-                                                         x = c(1, 2, 3, 4, 5),
-                                                         y = c(1, 2, 4, 8, 16),
-                                                         data = d,
-                                                         annotation = annotation,
-                                                         idCol = "SampleID",
-                                                         groupCol = "Group")
+# need to make uuids before I can have more than one on the same page
+ContrApption(data = d, annotation = annotation, idCol = "SampleID", groupCol = "Visit")
 ```
+
+## Here is some more stuff I guess?
+
+Sure why not?
