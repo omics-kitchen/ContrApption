@@ -3,7 +3,6 @@
 #' <Add Description>
 #'
 #' @import htmlwidgets
-#' @import dplyr
 #' @export
 ContrApption <- function(
   data, # dataset to visualize
@@ -17,10 +16,10 @@ ContrApption <- function(
 ) {
 
   # make the gene name column
-  data <- data %>% data.frame
+  data <- data.frame(data)
   data$gene <- rownames(data)
 
-  annotation <- annotation %>% data.frame
+  annotation <- data.frame(annotation)
   annotation$sampleID <- rownames(annotation)
 
   inputs = list(

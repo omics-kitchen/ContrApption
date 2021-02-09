@@ -3,4 +3,5 @@
 export(ContrApption)
 export(ContrApptionOutput)
 export(renderContrApption)
+import(dplyr)
 import(htmlwidgets)

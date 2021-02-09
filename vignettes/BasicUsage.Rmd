@@ -1,8 +1,8 @@
 ---
-title: "my-vignette"
+title: "ContrApption"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{ContrApption}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,12 +15,14 @@ knitr::opts_chunk$set(
 ```
 
 ## Dependencies
-
+HIIII I made this now it makes sense wheee
 ```{r setup}
+
 library(ContrApption)
-library(DESeq2)
-library(pasilla)
 library(dplyr)
+
+suppressMessages(library(DESeq2))
+suppressMessages(library(pasilla))
 ```
 
 ## Dataset
@@ -84,4 +86,11 @@ coldata %>% head
 ```{R}
 
 ContrApption(data = cts, annotation = coldata, groupCol = "interaction")
+```
+
+```{R}
+
+tools::buildVignettes(dir = ".", tangle = TRUE)
+dir.create("inst/doc")
+file.copy(dir("vignettes", full.names = TRUE), "inst/doc", overwrite = TRUE)
 ```

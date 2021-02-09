@@ -4,7 +4,16 @@
 \alias{ContrApption}
 \title{<Add Title>}
 \usage{
-ContrApption(message, width = NULL, height = NULL, elementId = NULL)
+ContrApption(
+  data,
+  annotation,
+  groupCol,
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  log2 = FALSE,
+  plotName = NULL
+)
 }
 \description{
 <Add Description>
