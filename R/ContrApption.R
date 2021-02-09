@@ -36,7 +36,14 @@ ContrApption <- function(
     width = width,
     height = height,
     package = 'ContrApption',
-    elementId = elementId
+    elementId = elementId,
+    sizingPolicy = htmlwidgets::sizingPolicy(
+      viewer.suppress = FALSE,
+      knitr.figure = FALSE,
+      # browser.padding = 75,
+      knitr.defaultWidth = 600,
+      knitr.defaultHeight = 350
+    )
   )
 }
 

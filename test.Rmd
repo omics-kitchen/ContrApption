@@ -7,14 +7,15 @@ library(dplyr)
 library(ContrApption)
 ```
 
+    debug (console only):
+      devtools::install(); library(ContrApption); ContrApption(data = d, annotation = annotation, idCol = "SampleID", groupCol = "Group")
+    
 ```{R}
 
 dds <- readRDS("dev/lncDESeq2Obj.Rds")
-```
-
-```{R}
 
 d <- counts(dds, normalized = TRUE)
+
 d %>% head
 ```
 
@@ -22,11 +23,6 @@ d %>% head
 
 annotation <- colData(dds)
 annotation
-```
-
-```{R eval=FALSE, include=FALSE}
-# console command (for dev)
-# devtools::install(); library(ContrApption); ContrApption("test", data = d, annotation = annotation, idCol = "SampleID", groupCol = "Group")
 ```
 
 ## Group
@@ -43,6 +39,21 @@ ContrApption(data = d, annotation = annotation, idCol = "SampleID", groupCol = "
 ContrApption(data = d, annotation = annotation, idCol = "SampleID", groupCol = "Visit")
 ```
 
-## Here is some more stuff I guess?
+## Interaction 
 
-Sure why not?
+```{R}
+
+annotation$Interaction <- paste0(annotation$Group, ":", annotation$Visit)
+
+annotation
+```
+
+```{R}
+# need to make uuids before I can have more than one on the same page
+ContrApption(data = d, annotation = annotation, idCol = "SampleID", groupCol = "Interaction")
+```
+
+```{R}
+
+sessionInfo()
+```
