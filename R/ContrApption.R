@@ -2,7 +2,7 @@
 #'
 #' <Add Description>
 #'
-#' @import htmlwidgets DESeq2 pasilla
+#' @import htmlwidgets DESeq2 pasilla dplyr
 #' @export
 ContrApption <- function(
   data, # dataset to visualize
@@ -10,9 +10,7 @@ ContrApption <- function(
   groupCol, # the column in the sample sheet that denotes the group statuses, what is being studied with the plot
   width = NULL,
   height = NULL,
-  elementId = NULL,
-  log2 = FALSE, # TODO
-  plotName = NULL # TODO
+  elementId = NULL
 ) {
 
   # make the gene name column
@@ -40,13 +38,15 @@ ContrApption <- function(
     sizingPolicy = htmlwidgets::sizingPolicy(
       viewer.suppress = FALSE,
       knitr.figure = FALSE,
-      # browser.padding = 75,
-      knitr.defaultWidth = 600,
-      knitr.defaultHeight = 350
+      padding = 15,
+      knitr.defaultWidth = 650,
+      knitr.defaultHeight = 430,
+      browser.defaultWidth = 750,
+      browser.defaultHeight = 530,
+      browser.fill = FALSE
     )
   )
 }
-
 #' Shiny bindings for ContrApption
 #'
 #' Output and render functions for using ContrApption within Shiny

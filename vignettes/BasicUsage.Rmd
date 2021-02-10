@@ -14,8 +14,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) 
+
 ## Dependencies
-HIIII I made this now it makes sense wheee
+
+We load the requires libraries:
+
 ```{r setup}
 
 library(ContrApption)
@@ -27,20 +31,11 @@ suppressMessages(library(pasilla))
 
 ## Dataset
 
-### Counts
-
-```{R}
-
-# loads counts file from the pasilla package 
-pasCts <- system.file("extdata", "pasilla_gene_counts.tsv", package = "pasilla", mustWork = TRUE)
-
-# reads counts of genes as a matrix
-cts <- as.matrix(read.csv(pasCts, sep = "\t", row.names = "gene_id")) %>% data.frame
-
-head(cts)
-```
+This vignette makes use of [DESeq2]() and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption.
 
 ### Annotation
+
+The following snippet retrieves the column metadata for the Pasilla experiment.
 
 ```{R}
 
@@ -51,7 +46,7 @@ pasAnno <- system.file("extdata", "pasilla_sample_annotation.csv", package = "pa
 coldata <- read.csv(pasAnno, row.names = 1)
 
 # select relevant columns
-coldata <- coldata[ , c("condition","type")] %>% data.frame
+coldata <- data.frame(coldata[ , c("condition","type")])
 
 # remove un-needed characters
 rownames(coldata) <- gsub("fb", "", rownames(coldata))
@@ -59,21 +54,75 @@ rownames(coldata) <- gsub("fb", "", rownames(coldata))
 coldata
 ```
 
+### Counts
+
+The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq samples. The exons/genes are the rows, and the samples in the experiment are the columns. The following code extracts the counts from the pckage.
+
+```{R}
+
+# loads counts file from the pasilla package 
+pasCts <- system.file("extdata", "pasilla_gene_counts.tsv", package = "pasilla", mustWork = TRUE)
+
+# reads counts of genes
+cts <- read.csv(pasCts, sep = "\t", row.names = "gene_id")
+
+# make sure the order is correct
+cts <- cts[, rownames(coldata)]
+
+head(cts)
+```
+
+
+
+### DESeq2
+
+We can create a DESeq2 dataset and then extract the normalized counts for visualization.
+
+```{R}
+
+# create a DESeq2 dataset from the metadata and counts
+dds <- DESeq(DESeqDataSetFromMatrix(countData = cts, colData = coldata, design = ~ condition))
+
+normCounts <- counts(dds, normalized = TRUE)
+```
+
+Given that embedding multiples widgets with 14599 rows of data may lead to performance issues, the user may want to focus one genes of interest as determined by the differential expression experiment:
+
+```{R}
+
+res <- results(dds, tidy = TRUE) %>% 
+  data.frame %>% 
+  filter(padj < 0.05)
+
+normCountsSig <- normCounts %>%
+  data.frame %>% 
+  filter(rownames(.) %in% res$row)
+  
+normCountsSig %>% nrow
+```
+
 ## Examples
 
 ### Two-factor Examples
 
+We pass the dataset, the annotation file, and the column contaning the experimental factor of interest to ContrApption.
+
 ```{R}
 
-ContrApption(data = cts, annotation = coldata, groupCol = "condition")
+ContrApption(data = normCountsSig, annotation = coldata, groupCol = "condition")
 ```
 
+
+In this experiment there is more than once experimental factor, so we can create another widget:
+
 ```{R}
 
-ContrApption(data = cts, annotation = coldata, groupCol = "type")
+ContrApption(data = normCountsSig, annotation = coldata, groupCol = "type")
 ```
 
 ### Interaction-style example
+
+ContrApption operates on experimental factors with an arbitrary numbers of levels. We can use this to subset by multiple factors of interest but merging the columns of the annotation file.
 
 ```{R}
 
@@ -83,14 +132,19 @@ coldata$interaction <- paste0(coldata$condition, ":", coldata$type)
 head(coldata)
 ```
 
-```{R}
-
-ContrApption(data = cts, annotation = coldata, groupCol = "interaction")
-```
+We can then use the function normally:
 
 ```{R}
 
-tools::buildVignettes(dir = ".", tangle = TRUE)
-dir.create("inst/doc")
-file.copy(dir("vignettes", full.names = TRUE), "inst/doc", overwrite = TRUE)
+# pass our new variable
+ContrApption(data = normCountsSig, annotation = coldata, groupCol = "interaction")
 ```
+
+    Note that users interested in this sort of experiment would generally re-run DESeq2 with a different experimental design: 
+    >DESeq(DESeqDataSetFromMatrix(countData = cts, colData = coldata, design = ~ condition * type))
+
+```{R}
+
+sessionInfo()
+```
+

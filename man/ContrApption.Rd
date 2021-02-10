@@ -10,9 +10,7 @@ ContrApption(
   groupCol,
   width = NULL,
   height = NULL,
-  elementId = NULL,
-  log2 = FALSE,
-  plotName = NULL
+  elementId = NULL
 )
 }
 \description{

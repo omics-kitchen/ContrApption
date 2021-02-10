@@ -7,13 +7,27 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
 
     /* create blank plot in global scope */
+    var layout = {
+      margin: {
+        autosize: false,
+        // width: 500,
+        // height: 350,
+        margin: {
+          l: 10,  
+          r: 10,
+          b: 10,
+          t: 10,
+          pad: 4
+        }
+      }
+    }
+
+    var plotlyDiv = el
 
     var plot = Plotly.plot(
-      graphDi = el,
+      graphDiv = plotlyDiv,
       data = [],
-      layout = {
-        margin: { t: 0 }
-      },
+      layout = layout
     );
 
     return {
@@ -137,30 +151,31 @@ HTMLWidgets.widget({
 
         // update the empty plot with the data
         Plotly.react(
-          graphDi = el,
+          graphDiv = plotlyDiv,
           data = plotlyData,
-          layout = {
-            margin: { t: 0 }
-          },
+          layout = layout
         );
 
-
+        
         /* add dropdown and handle updates to it */
 
         // make dropdown id (permits multiple widgets per book)
         let dropdownID = "d3-dropdown-" + makeid(15)
 
+        d3.select(el).style("padding-bottom", "30px")
         // add a dropdown element
-        d3.select(el)                // selects the element of the widget
-          .append("div")             // adds a div for the dropdown
-          .attr("id", dropdownID) // gives it a name 
-          .append("select")          // puts a select in the div
-          .selectAll("option")       // selects options of that element
-          .data(dataSet['gene'])     // set the gene list as the selections
-          .enter()                   // saves the data to that element
-          .append("option")          // adds options 
+        d3.select(el)
+          .append("div")                    // adds a div for the dropdown
+          .attr("id", dropdownID)           // gives it a name 
+          .lower()
+          .append("select")                 // puts a select in the div
+          .selectAll("option")              // selects options of that element
+          .data(dataSet['gene'])            // set the gene list as the selections
+          .enter()                          // saves the data to that element
+          .append("option")                 // adds options 
           .attr("value", function (d) { return d; }) // puts the data (gene names as the options)
-          .text(function (d) { return d; }); // adds the text of the gene to the display
+          .text(function (d) { return d; }) // adds the text of the gene to the display
+
 
         // handle updates to the dropdown
         d3.select("#" + dropdownID)
@@ -174,11 +189,9 @@ HTMLWidgets.widget({
             let plotlyData = formatDataForPlotly(filteredData);
             // cue reaction from plotly to update
             Plotly.react(
-              graphDi = el,
+              graphDiv = plotlyDiv,
               data = plotlyData,
-              layout = {
-                margin: { t: 0 }
-              },
+              layout = layout
             );
           })
 
