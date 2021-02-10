@@ -37,7 +37,7 @@ pasCts <- system.file("extdata", "pasilla_gene_counts.tsv", package = "pasilla",
 # reads counts of genes as a matrix
 cts <- as.matrix(read.csv(pasCts, sep = "\t", row.names = "gene_id")) %>% data.frame
 
-cts %>% head
+head(cts)
 ```
 
 ### Annotation
@@ -80,7 +80,7 @@ ContrApption(data = cts, annotation = coldata, groupCol = "type")
 # derive a new variable - every combitation of condition and type
 coldata$interaction <- paste0(coldata$condition, ":", coldata$type)
 
-coldata %>% head
+head(coldata)
 ```
 
 ```{R}

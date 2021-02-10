@@ -3,4 +3,6 @@
 export(ContrApption)
 export(ContrApptionOutput)
 export(renderContrApption)
+import(DESeq2)
 import(htmlwidgets)
+import(pasilla)

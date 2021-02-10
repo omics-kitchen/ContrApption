@@ -2,7 +2,7 @@
 #'
 #' <Add Description>
 #'
-#' @import htmlwidgets
+#' @import htmlwidgets DESeq2 pasilla
 #' @export
 ContrApption <- function(
   data, # dataset to visualize

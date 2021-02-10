@@ -1,22 +1,31 @@
 Package: ContrApption
-Title: What the Package Does (One Line, Title Case)
+Title: Interactive boxplots to visualize contrasts in RNA-Seq or simimilarly-formatted datasets
 Version: 0.0.0.9000
 Authors@R: c(
     person(given = "Thadryan",
-           family = "Sweeney",
-           role = c("aut", "cre"),
-           email = "first.last@example.com"),
+        family = "Sweeney",
+        role = c("aut", "cre"),
+        email = "first.last@example.com"),
     person(given = "Robert Kitchen",
-       family = "Last",
-       role = c("aut"),
-       email = "first.last@example.com"))
-Description: What the package does (one paragraph).
+        family = "Last",
+        role = c("aut"),
+        email = "first.last@example.com"))
+Description: Inspired by the 'reactable', ContrApption takes a dataset consisting of
+    1) a numeric matrix or dataframe in which each column is an observation (sample)
+    and each row is a feature (gene) and 2) an annotation table where the rows correspond
+    to the columns of the numeric matrix and provides information on which samples belong
+    to which experimental group. ContrApption uses the files to create an interactive HTML
+    widget using the d3 and plotly-js JavaScript libraries. Users can select features of 
+    interest and the plot widget will update in real time.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Imports: htmlwidgets
+Imports:
+    htmlwidgets,
+    DESeq2,
+    pasilla
 Suggests: 
     knitr,
     rmarkdown

@@ -5,3 +5,4 @@ Test2.Rmd
 inst/doc
 doc
 Meta
+*.sh
