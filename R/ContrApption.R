@@ -8,15 +8,17 @@
 #' @param annotation The metadata on each sample (column in `data`) denoting which expermental group each
 #' sample (column) the sample belongs to. The rownames of this must match the column names of `data.
 #' @param groupCol The column in the annotation file that contains the experimental factor on which to 
-#' base the grouping og=f the dataset .
-#' @param plotName A title for the plot.
+#' base the grouping of the input data.
+#' @param plotName A title for the plot. Defaults to "ContrApption"
+#' @param yAxisName A title for the y axis. Defaults to NULL
 #' 
 #' @export
 ContrApption <- function(
   data, 
   annotation,
   groupCol,
-  plotName = "ContrApption"
+  plotName = "ContrApption",
+  yAxisName = NULL
 ) {
 
   # preserve for htmlwidget; we're not using explicity
@@ -35,7 +37,8 @@ ContrApption <- function(
     data = data,
     annotation = annotation,
     groupCol = groupCol,
-    plotName = plotName
+    plotName = plotName,
+    yAxisName = yAxisName
   )
 
   # create widget

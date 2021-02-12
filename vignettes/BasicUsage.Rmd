@@ -14,7 +14,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) 
+
+
+ContrApption allows users to easily create a boxplot that responds to user input via a dropdown menu without using JavaScript and with minimal R usage. It requires 3 inputs:
+
+  * A matrix or data.frame of numeric data to visualize where the columns are the samples in the experiment ("numeric data").
+  * A matrix or data.frame of meta describing the experimental features of the experiment and which samples
+  belong to which experimental conditions ("annotation data").
+  * The name of an experimental factor (as a string) by which to group the input data
+    
+Note that the row names of the annotation data must mach the column names of the numeric data. This is reflect the requirements of the RNA-Seq
+experiments for which ContrApption was designed. An intuitive visualization of this data structure can be found on page 5 of the [Beginner’s guide to using the DESeq2 package](https://bioc.ism.ac.jp/packages/2.14/bioc/vignettes/DESeq2/inst/doc/beginner.pdf). There is no reason a users from other domains with data in the same structure cannot use the tool however, as the inputs required are simply strings and numbers.
 
 ## Dependencies
 
@@ -31,9 +41,9 @@ suppressMessages(library(pasilla))
 
 ## Dataset
 
-This vignette makes use of [DESeq2]() and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption.
+This vignette makes use of [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption. The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) 
 
-### Annotation
+### Annotation Data and Groups
 
 The following snippet retrieves the column metadata for the Pasilla experiment.
 
@@ -54,9 +64,11 @@ rownames(coldata) <- gsub("fb", "", rownames(coldata))
 coldata
 ```
 
-### Counts
+This matrix will be our `annotation` input. Here the rownames are the sample names of the experiment and either 'condition' or 'type' may be used as a group for `groupCol`.
 
-The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq samples. The exons/genes are the rows, and the samples in the experiment are the columns. The following code extracts the counts from the pckage.
+### Numeric Data
+
+The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq samples which will be our `data` input. The exons/genes are the rows, and the samples in the experiment are the columns. The following code extracts the counts from the pckage.
 
 ```{R}
 
@@ -71,8 +83,6 @@ cts <- cts[, rownames(coldata)]
 
 head(cts)
 ```
-
-
 
 ### DESeq2
 
@@ -105,7 +115,7 @@ normCountsSig %>% nrow
 
 ### Two-factor Examples
 
-We pass the dataset, the annotation file, and the column contaning the experimental factor of interest to ContrApption.
+We pass the dataset, the annotation file, and the column contaning the experimental factor of interest to ContrApption, resulting in a widget with a dropdown menu of features and boxplots of the input data grouped as directed. 
 
 ```{R}
 
@@ -113,11 +123,17 @@ ContrApption(data = normCountsSig, annotation = coldata, groupCol = "condition")
 ```
 
 
-In this experiment there is more than once experimental factor, so we can create another widget:
+Users may create multiple widgets per book. In this experiment there is more than once experimental factor, so we can create another widget based on a different group. We may also use the optional y-axis label anf plot title arguments argument.
 
 ```{R}
 
-ContrApption(data = normCountsSig, annotation = coldata, groupCol = "type")
+ContrApption(
+  data = normCountsSig,
+  annotation = coldata,
+  groupCol = "type",
+  plotName = "DESeq2 normalized counts by sample types",
+  yAxisName = "counts"
+)
 ```
 
 ### Interaction-style example

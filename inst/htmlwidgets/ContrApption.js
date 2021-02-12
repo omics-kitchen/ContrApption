@@ -90,7 +90,17 @@ HTMLWidgets.widget({
             for(j in counts){
               traceArray.push(counts[j])
             }
-            output.push({y: traceArray, type: 'box', name: i})
+            output.push(
+              {
+                y: traceArray,
+                type: "box",
+                name: i,
+                boxmean: "sd",
+                boxpoints: "all",
+                jitter: 0.2,
+                pointpos: 0
+              }
+            )
           }
           return output
         }
@@ -115,6 +125,7 @@ HTMLWidgets.widget({
         let annotation = inputs.annotation;
         let groupCol = inputs.groupCol;
         let plotName = inputs.plotName;
+        let yAxisName = inputs.yAxisName;
 
         
         /* get initial data and create initial plot */
@@ -134,16 +145,20 @@ HTMLWidgets.widget({
         // create a layout for the new plot
         var layout = {
           title: plotName,
+          autosize: false,
           margin: {
-            autosize: false,
-            // width: 500,
-            // height: 350,
-            margin: {
-              l: 10,  
-              r: 10,
-              b: 10,
-              t: 10,
-              pad: 4
+            // l: 10,  
+            // r: 10,
+            // b: 10,
+            // t: 10,
+            // pad: 4
+          },
+          yaxis: {
+            title: yAxisName,
+            titlefont: {
+              family: 'Arial, sans-serif',
+              size: 12,
+              color: 'grey'
             }
           }
         }
@@ -200,11 +215,11 @@ HTMLWidgets.widget({
 
       }, // renderValue
 
-      resize: function(width, height) {
+      // resize: function(width, height) {
 
-        // TODO: code to re-render the widget with a new size
+      //   // TODO: code to re-render the widget with a new size
 
-      },
+      // },
 
       // advised by docs, not sure how I'd use it
       plot: plot

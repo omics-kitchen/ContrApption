@@ -4,6 +4,6 @@ dependencies:
    src: "htmlwidgets/lib/plotly-1.58.4"
    script: plotly.min.js
  - name: d3
-   version: 1.58.4
+   version: 5.16.0
    src: "htmlwidgets/lib/d3-5.16.0"
    script: d3.min.js
