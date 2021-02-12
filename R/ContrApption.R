@@ -2,16 +2,27 @@
 #'
 #' <Add Description>
 #'
-#' @import htmlwidgets
+#' @import htmlwidgets dplyr DESeq2 pasilla
+#' @param data The dataset to visualize, where row names are features and each column is a sample.
+#' The column names of this input must match the rownames of the `annotation` file.
+#' @param annotation The metadata on each sample (column in `data`) denoting which expermental group each
+#' sample (column) the sample belongs to. The rownames of this must match the column names of `data.
+#' @param groupCol The column in the annotation file that contains the experimental factor on which to 
+#' base the grouping og=f the dataset .
+#' @param plotName A title for the plot.
+#' 
 #' @export
 ContrApption <- function(
-  data, # dataset to visualize
-  annotation, # metadata on the columns showing which belongs to which group
-  groupCol, # the column in the sample sheet that denotes the group statuses, what is being studied with the plot
-  width = NULL,
-  height = NULL,
-  elementId = NULL
+  data, 
+  annotation,
+  groupCol,
+  plotName = "ContrApption"
 ) {
+
+  # preserve for htmlwidget; we're not using explicity
+  width <- NULL
+  height <- NULL
+  elementId <- NULL
 
   # make the gene name column
   data <- data.frame(data)
@@ -21,10 +32,10 @@ ContrApption <- function(
   annotation$sampleID <- rownames(annotation)
 
   inputs = list(
-    message = message,
     data = data,
     annotation = annotation,
-    groupCol = groupCol
+    groupCol = groupCol,
+    plotName = plotName
   )
 
   # create widget
