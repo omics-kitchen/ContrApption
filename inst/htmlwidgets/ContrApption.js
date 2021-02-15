@@ -164,51 +164,46 @@ HTMLWidgets.widget({
         }
 
         // update the empty plot with the data
-        Plotly.react(
-          graphDiv = el,
-          data = plotlyData,
-          layout = layout
-        );
+        Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
+
+
+        // // pad the bottom the widget to make room
+        // d3.select(el).style("padding-bottom", "30px")
 
         
         /* add dropdown and handle updates to it */
 
         // make dropdown id (permits multiple widgets per book)
-        let dropdownID = "d3-dropdown-" + makeid(15)
+        let dropdownName = "dropdown-" + makeid(15)
 
-        // pad the bottom the widget to make room
-        d3.select(el).style("padding-bottom", "30px")
-
-        // add a dropdown element
         d3.select(el)
-          .append("div")                    // adds a div for the dropdown
-          .attr("id", dropdownID)           // gives it a name 
-          .lower()                          // move dropdown to top
-          .append("select")                 // puts a select in the div
-          .selectAll("option")              // selects options of that element
-          .data(dataSet['gene'])            // set the gene list as the selections
-          .enter()                          // saves the data to that element
-          .append("option")                 // adds options 
-          .attr("value", function (d) { return d; }) // puts the data (gene names as the options)
-          .text(function (d) { return d; }) // adds the text of the gene to the display
-
+          .append("select")                           // add a select element
+          .lower()                                    // move the select to the top of the element 
+          .attr("id", dropdownName)                   // give it a unique ID
+          .selectAll("option")                        // selects options of that element
+          .data(dataSet['gene'])                      // set the gene list as the selections
+          .enter()                                    // saves the data to that element
+          .append("option")                           // adds options 
+          .attr("value", function (d) { return d; })  // puts the data (gene names as the options)
+          .text(function (d) { return d; })           // adds the text of the gene to the display
+        
+        // add the searchble dropdown
+        new SlimSelect({
+          select: "#" + dropdownName
+        })
 
         // handle updates to the dropdown
-        d3.select("#" + dropdownID)
-          // when a change is observed
-          .on("change", function(){
+        d3.select("#" + dropdownName)
+          .on("change", function() {
             // get the gene currently check in the dropdown
-            const selectedGene = d3.select('#' + dropdownID + ' option:checked').text();
+            const selectedGene = d3.select('#' + dropdownName + ' option:checked').text();
+            console.log(selectedGene)
             // re-filter data based on that gene
             let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
             // format the dataset for plotly
             let plotlyData = formatDataForPlotly(filteredData);
             // cue reaction from plotly to update
-            Plotly.react(
-              graphDiv = el,
-              data = plotlyData,
-              layout = layout
-            );
+            Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
           })
 
 
@@ -216,9 +211,7 @@ HTMLWidgets.widget({
       }, // renderValue
 
       // resize: function(width, height) {
-
       //   // TODO: code to re-render the widget with a new size
-
       // },
 
       // advised by docs, not sure how I'd use it
