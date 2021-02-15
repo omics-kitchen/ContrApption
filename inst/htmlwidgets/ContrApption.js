@@ -167,10 +167,6 @@ HTMLWidgets.widget({
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
 
 
-        // // pad the bottom the widget to make room
-        // d3.select(el).style("padding-bottom", "30px")
-
-        
         /* add dropdown and handle updates to it */
 
         // make dropdown id (permits multiple widgets per book)
@@ -197,7 +193,6 @@ HTMLWidgets.widget({
           .on("change", function() {
             // get the gene currently check in the dropdown
             const selectedGene = d3.select('#' + dropdownName + ' option:checked').text();
-            console.log(selectedGene)
             // re-filter data based on that gene
             let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
             // format the dataset for plotly
