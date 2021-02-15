@@ -201,13 +201,14 @@ HTMLWidgets.widget({
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
           })
 
-
-
+          
       }, // renderValue
+
 
       // resize: function(width, height) {
       //   // TODO: code to re-render the widget with a new size
       // },
+
 
       // advised by docs, not sure how I'd use it
       plot: plot
