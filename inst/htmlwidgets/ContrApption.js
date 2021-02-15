@@ -6,6 +6,7 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
+
     /* create blank plot in global scope */
     var plot = Plotly.plot(graphDiv = el, data = []);
 
@@ -13,6 +14,7 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(inputs) {
+
 
         /* define the core functions */
 
