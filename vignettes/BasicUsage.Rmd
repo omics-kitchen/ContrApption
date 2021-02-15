@@ -123,7 +123,7 @@ ContrApption(data = normCountsSig, annotation = coldata, groupCol = "condition")
 ```
 
 
-Users may create multiple widgets per book. In this experiment there is more than once experimental factor, so we can create another widget based on a different group. We may also use the optional y-axis label anf plot title arguments argument.
+Users may create multiple widgets per book. In this experiment there is more than one experimental factor, so we can create another widget based on a different group. We may also use the optional y-axis label anf plot title arguments argument.
 
 ```{R}
 
