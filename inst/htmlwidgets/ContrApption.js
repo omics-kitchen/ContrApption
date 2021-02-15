@@ -165,6 +165,9 @@ HTMLWidgets.widget({
           }
         }
 
+        // pad the bottom the widget to make room
+        d3.select(el).style("padding-bottom", "30px")
+
         // update the empty plot with the data
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
 
