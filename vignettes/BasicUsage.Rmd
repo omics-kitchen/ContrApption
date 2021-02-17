@@ -50,7 +50,8 @@ The following snippet retrieves the column metadata for the Pasilla experiment.
 ```{R}
 
 # loads sample annotation from the pasilla package
-pasAnno <- system.file("extdata", "pasilla_sample_annotation.csv", package = "pasilla", mustWork = TRUE)
+pasAnno <- system.file("extdata", "pasilla_sample_annotation.csv",
+                       package = "pasilla", mustWork = TRUE)
 
 # read in the sample data
 coldata <- read.csv(pasAnno, row.names = 1)
@@ -73,7 +74,8 @@ The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq sample
 ```{R}
 
 # loads counts file from the pasilla package 
-pasCts <- system.file("extdata", "pasilla_gene_counts.tsv", package = "pasilla", mustWork = TRUE)
+pasCts <- system.file("extdata", "pasilla_gene_counts.tsv",
+                      package = "pasilla", mustWork = TRUE)
 
 # reads counts of genes
 cts <- read.csv(pasCts, sep = "\t", row.names = "gene_id")
