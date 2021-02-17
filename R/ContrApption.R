@@ -16,7 +16,7 @@
 ContrApption <- function(
   data, 
   annotation,
-  groupCol,
+  # groupCol,
   plotName = "ContrApption",
   yAxisName = NULL
 ) {
@@ -33,10 +33,12 @@ ContrApption <- function(
   annotation <- data.frame(annotation)
   annotation$sampleID <- rownames(annotation)
 
+  print(annotation)
+
   inputs = list(
     data = data,
     annotation = annotation,
-    groupCol = groupCol,
+    # groupCol = groupCol,
     plotName = plotName,
     yAxisName = yAxisName
   )

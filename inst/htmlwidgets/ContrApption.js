@@ -121,6 +121,19 @@ HTMLWidgets.widget({
         }
 
 
+        function updatePlotlyData(el, layout) {
+          // get the gene currently check in the dropdown
+          let selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+          let selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
+
+          let stateMap = mapSamplesToGroups(annotation, selectedGroup);
+          // re-filter data based on that gene
+          let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
+          // format the dataset for plotly
+          return formatDataForPlotly(filteredData);
+        }
+
+
         /* unpack inputs from R */
 
         let dataSet = inputs.data;
@@ -128,15 +141,17 @@ HTMLWidgets.widget({
         let groupCol = inputs.groupCol;
         let plotName = inputs.plotName;
         let yAxisName = inputs.yAxisName;
+        let allTranscripts = dataSet['gene'];
+        let allGroups = Object.keys(annotation)
 
-        
         /* get initial data and create initial plot */
 
         // start on the first gene in the list
-        let initialGene = dataSet['gene'][0];
+        let initialGene = allTranscripts[0];
+        let initialGroup = allGroups[0];
 
         // assign each sample a state based on the group of interest (disease/control, etc)
-        let stateMap = mapSamplesToGroups(annotation, groupCol);
+        let stateMap = mapSamplesToGroups(annotation, initialGroup);
 
         // use the statemap to sort the entries for a specific gene
         let filteredData = filterGroupDataByGene(dataSet, initialGene, stateMap);
@@ -175,38 +190,70 @@ HTMLWidgets.widget({
         /* add dropdown and handle updates to it */
 
         // make dropdown id (permits multiple widgets per book)
-        let dropdownName = "dropdown-" + makeid(15)
+        let dropdownID = makeid(15)
+        let dropdownOuter = "dropdown-outer-" + dropdownID
+        let geneDropdownName = "dropdown-gene" + dropdownID
+        let groupDropdownName = "dropdown-group" + dropdownID
 
+        // an outer div in which to place the two dropdown
         d3.select(el)
+          .append("div")
+          .attr("id", dropdownOuter)
+          // .lower()
+        
+        
+        d3.select("#" + dropdownOuter)
           .append("select")                           // add a select element
-          .lower()                                    // move the select to the top of the element 
-          .attr("id", dropdownName)                   // give it a unique ID
+          .style("float", "left")                               
+          .style("width", "150px")
+          .style("padding-left", "10px")
+          .attr("id", groupDropdownName)              // give it a unique ID
+          .lower()
           .selectAll("option")                        // selects options of that element
-          .data(dataSet['gene'])                      // set the gene list as the selections
+          .data(allGroups)                      // set the gene list as the selections
           .enter()                                    // saves the data to that element
           .append("option")                           // adds options 
           .attr("value", function (d) { return d; })  // puts the data (gene names as the options)
           .text(function (d) { return d; })           // adds the text of the gene to the display
+
+
+        d3.select("#" + dropdownOuter)
+          .append("select")                           // add a select element
+          .style("float", "left")                              
+          .style("width", "150px")
+          .style("padding-right", "10px")
+          .attr("id", geneDropdownName)               // give it a unique ID
+          .lower()
+          .selectAll("option")                        // selects options of that element
+          .data(allTranscripts)                      // set the gene list as the selections
+          .enter()                                    // saves the data to that element
+          .append("option")                           // adds options 
+          .attr("value", function (d) { return d; })  // puts the data (gene names as the options)
+          .text(function (d) { return d; })           // adds the text of the gene to the display
+
+
+
         
         // add the searchble dropdown
         new SlimSelect({
-          select: "#" + dropdownName
+          select: "#" + geneDropdownName
+        })
+
+        new SlimSelect({
+          select: "#" + groupDropdownName
         })
 
         // handle updates to the dropdown
-        d3.select("#" + dropdownName)
-          .on("change", function() {
-            // get the gene currently check in the dropdown
-            const selectedGene = d3.select('#' + dropdownName + ' option:checked').text();
-            // re-filter data based on that gene
-            let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
-            // format the dataset for plotly
-            let plotlyData = formatDataForPlotly(filteredData);
-            // cue reaction from plotly to update
-            Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
+        d3.select("#" + geneDropdownName)
+          .on("change", function(){
+            Plotly.react(graphDiv = el, data = updatePlotlyData(), layout = layout)
           })
 
-          
+        d3.select("#" + groupDropdownName)
+          .on("change", function(){
+            Plotly.react(graphDiv = el, data = updatePlotlyData(), layout = layout)
+          })
+        
       }, // renderValue
 
 

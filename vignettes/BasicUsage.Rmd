@@ -117,11 +117,11 @@ normCountsSig %>% nrow
 
 ### Two-factor Examples
 
-We pass the dataset, the annotation file, and the column contaning the experimental factor of interest to ContrApption, resulting in a widget with a dropdown menu of features and boxplots of the input data grouped as directed. 
+We pass the dataset and the annotation file to ContrApption, resulting in a widget with a dropdown menu of features and boxplots of the input data grouped as directed. 
 
 ```{R}
 
-ContrApption(data = normCountsSig, annotation = coldata, groupCol = "condition")
+ContrApption(data = normCountsSig, annotation = coldata)
 ```
 
 
@@ -132,7 +132,6 @@ Users may create multiple widgets per book. In this experiment there is more tha
 ContrApption(
   data = normCountsSig,
   annotation = coldata,
-  groupCol = "type",
   plotName = "DESeq2 normalized counts by sample types",
   yAxisName = "counts"
 )
@@ -155,7 +154,7 @@ We can then use the function normally:
 ```{R}
 
 # pass our new variable
-ContrApption(data = normCountsSig, annotation = coldata, groupCol = "interaction")
+ContrApption(data = normCountsSig, annotation = coldata)
 ```
 
     Note that users interested in this sort of experiment would generally re-run DESeq2 with a different experimental design: 
