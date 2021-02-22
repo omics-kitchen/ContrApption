@@ -26,6 +26,17 @@ ContrApption <- function(
   height <- NULL
   elementId <- NULL
 
+  if (crosstalk::is.SharedData(data)) {
+    # Using Crosstalk
+    key <- data$key()
+    group <- data$groupName()
+    data <- data$origData()
+  } else {
+    # Not using Crosstalk
+    key <- NULL
+    group <- NULL
+  }
+  
   # make the gene name column
   data <- data.frame(data)
   data$gene <- rownames(data)
@@ -38,7 +49,11 @@ ContrApption <- function(
     annotation = annotation,
     # groupCol = groupCol,
     plotName = plotName,
-    yAxisName = yAxisName
+    yAxisName = yAxisName,
+    settings = list(
+      crosstalk_key = key,
+      crosstalk_group = group
+    )
   )
 
   # create widget
@@ -49,6 +64,7 @@ ContrApption <- function(
     height = height,
     package = 'ContrApption',
     elementId = elementId,
+    dependencies = crosstalk::crosstalkLibs(),
     sizingPolicy = htmlwidgets::sizingPolicy(
       viewer.suppress = FALSE,
       knitr.figure = FALSE,

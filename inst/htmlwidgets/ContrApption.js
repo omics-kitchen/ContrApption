@@ -10,6 +10,16 @@ HTMLWidgets.widget({
     /* create blank plot in global scope */
     var plot = Plotly.plot(graphDiv = el, data = []);
 
+    var sel_handle = new crosstalk.SelectionHandle();
+
+    // sel_handle.on("change", function(e) {
+    //   console.log("HEY")
+    //   if (e.sender !== sel_handle) {
+    //     console.log("WHAT IN FUCK")
+    //     console.log(e.value[0])
+    //   }
+    // })
+
     // the rest of the logic is conducted in the rendering  function
     return {
 
@@ -255,13 +265,41 @@ HTMLWidgets.widget({
           .on("change", function(){
             Plotly.react(graphDiv = el, data = updatePlotlyData(), layout = layout)
           })
+
         
+
+        sel_handle.on("change", function(e) {
+          console.log("down here!")
+          if (e.sender !== sel_handle) {
+            console.log(e.value[0])
+            // get the gene currently check in the dropdown
+            let selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+            let selectedGene = e.value[0]
+            let stateMap = mapSamplesToGroups(annotation, selectedGroup);
+            // re-filter data based on that gene
+            let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
+            // format the dataset for plotly
+            Plotly.react(graphDiv = el, data = formatDataForPlotly(filteredData), layout = layout)
+          }
+        })
+        
+        sel_handle.setGroup(inputs.settings.crosstalk_group);
+          
+        // sel_handle.on("change", function(e) {
+        //   if (e.sender !== sel_handle) {
+        //     console.log(e.value[0])
+        //   }
+        // })
+
       }, // renderValue
 
 
-      // resize: function(width, height) {
-      //   // TODO: code to re-render the widget with a new size
-      // },
+
+
+      resize: function(width, height) {
+        // TODO: code to re-render the widget with a new size
+        // plot.width(width-30).height(height-30)(false);
+      },
 
 
       // advised by docs, not sure how I'd use it
