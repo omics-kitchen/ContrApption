@@ -33,8 +33,6 @@ ContrApption <- function(
   annotation <- data.frame(annotation)
   annotation$sampleID <- rownames(annotation)
 
-  print(annotation)
-
   inputs = list(
     data = data,
     annotation = annotation,

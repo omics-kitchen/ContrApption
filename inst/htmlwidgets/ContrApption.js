@@ -121,7 +121,7 @@ HTMLWidgets.widget({
         }
 
 
-        function updatePlotlyData(el, layout) {
+        function updatePlotlyData() {
           // get the gene currently check in the dropdown
           let selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
           let selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
@@ -138,7 +138,6 @@ HTMLWidgets.widget({
 
         let dataSet = inputs.data;
         let annotation = inputs.annotation;
-        let groupCol = inputs.groupCol;
         let plotName = inputs.plotName;
         let yAxisName = inputs.yAxisName;
         let allTranscripts = dataSet['gene'];
@@ -163,12 +162,14 @@ HTMLWidgets.widget({
         var layout = {
           title: plotName,
           autosize: false,
+          height: 400,
+          width: 750,
           margin: {
-            // l: 10,  
-            // r: 10,
-            // b: 10,
-            // t: 10,
-            // pad: 4
+            l: 10,  
+            r: 10,
+            b: 75,
+            t: 35,
+            pad: 10
           },
           yaxis: {
             title: yAxisName,
@@ -181,7 +182,7 @@ HTMLWidgets.widget({
         }
 
         // pad the bottom the widget to make room
-        d3.select(el).style("padding-bottom", "30px")
+        d3.select(el).style("padding-bottom", "15px")
 
         // update the empty plot with the data
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
@@ -199,7 +200,8 @@ HTMLWidgets.widget({
         d3.select(el)
           .append("div")
           .attr("id", dropdownOuter)
-          // .lower()
+          .style("padding-bottom", "30px")
+          .lower()
         
         
         d3.select("#" + dropdownOuter)
