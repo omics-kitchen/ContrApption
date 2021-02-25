@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^ContrApption\.Rproj$
 ^\.Rproj\.user$
 ^doc$

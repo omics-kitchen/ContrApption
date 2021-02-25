@@ -24,6 +24,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
     htmlwidgets,
+    crosstalk,
     dplyr,
     DESeq2,
     pasilla
