@@ -269,9 +269,7 @@ HTMLWidgets.widget({
         
 
         sel_handle.on("change", function(e) {
-          console.log("down here!")
           if (e.sender !== sel_handle) {
-            console.log(e.value[0])
             // get the gene currently check in the dropdown
             let selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
             let selectedGene = e.value[0]
