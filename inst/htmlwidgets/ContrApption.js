@@ -6,19 +6,11 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
-
     /* create blank plot in global scope */
-    var plot = Plotly.plot(graphDiv = el, data = []);
+    var plot = Plotly.plot(graphDiv = el, data = [],config = {responsive: true});
 
+    // crosstalk handle
     var sel_handle = new crosstalk.SelectionHandle();
-
-    // sel_handle.on("change", function(e) {
-    //   console.log("HEY")
-    //   if (e.sender !== sel_handle) {
-    //     console.log("WHAT IN FUCK")
-    //     console.log(e.value[0])
-    //   }
-    // })
 
     // the rest of the logic is conducted in the rendering  function
     return {
@@ -150,8 +142,15 @@ HTMLWidgets.widget({
         let annotation = inputs.annotation;
         let plotName = inputs.plotName;
         let yAxisName = inputs.yAxisName;
+        let bscolSize = inputs.bscolSize;
+        console.log(bscolSize)
         let allTranscripts = dataSet['gene'];
-        let allGroups = Object.keys(annotation)
+        let allGroups = Object.keys(annotation);
+
+        if(bscolSize == true){
+          console.log(bscolSize)
+          width = width/2
+        }
 
         /* get initial data and create initial plot */
 
@@ -172,8 +171,8 @@ HTMLWidgets.widget({
         var layout = {
           title: plotName,
           autosize: false,
-          height: 400,
-          width: 750,
+          height: height * 0.9,
+          width: width * 0.9,
           margin: {
             l: 10,  
             r: 10,
@@ -205,6 +204,7 @@ HTMLWidgets.widget({
         let dropdownOuter = "dropdown-outer-" + dropdownID
         let geneDropdownName = "dropdown-gene" + dropdownID
         let groupDropdownName = "dropdown-group" + dropdownID
+        let dropDownWidth = 0.3 * width
 
         // an outer div in which to place the two dropdown
         d3.select(el)
@@ -216,13 +216,13 @@ HTMLWidgets.widget({
         
         d3.select("#" + dropdownOuter)
           .append("select")                           // add a select element
-          .style("float", "left")                               
-          .style("width", "150px")
-          .style("padding-left", "10px")
+          .style("float", "left")                     // float to the left of the div
+          .style("width", dropDownWidth + "px")       // set the dropdown width to 1/3rd of the widget width
+          .style("padding-left", "10px")              // a little breathing room for the divs
           .attr("id", groupDropdownName)              // give it a unique ID
-          .lower()
+          .lower()                                    // moves dropdown 'up' in the div
           .selectAll("option")                        // selects options of that element
-          .data(allGroups)                      // set the gene list as the selections
+          .data(allGroups)                            // set the gene list as the selections
           .enter()                                    // saves the data to that element
           .append("option")                           // adds options 
           .attr("value", function (d) { return d; })  // puts the data (gene names as the options)
@@ -231,13 +231,13 @@ HTMLWidgets.widget({
 
         d3.select("#" + dropdownOuter)
           .append("select")                           // add a select element
-          .style("float", "left")                              
-          .style("width", "150px")
-          .style("padding-right", "10px")
+          .style("float", "left")                     // float to the left of the div
+          .style("width", dropDownWidth + "px")       // set the dropdown width to 1/3rd of the widget width
+          .style("padding-right", "10px")             // a little breathing room for the divs
           .attr("id", geneDropdownName)               // give it a unique ID
-          .lower()
+          .lower()                                    // moves dropdown 'up' in the div
           .selectAll("option")                        // selects options of that element
-          .data(allTranscripts)                      // set the gene list as the selections
+          .data(allTranscripts)                       // set the gene list as the selections
           .enter()                                    // saves the data to that element
           .append("option")                           // adds options 
           .attr("value", function (d) { return d; })  // puts the data (gene names as the options)

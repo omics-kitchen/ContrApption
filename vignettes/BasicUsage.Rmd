@@ -31,9 +31,13 @@ experiments for which ContrApption was designed. An intuitive visualization of t
 We load the requires libraries:
 
 ```{r setup}
-
+devtools::install()
 library(ContrApption)
 library(dplyr)
+
+# libraries for optional integration
+library(DT)
+library(crosstalk)
 
 suppressMessages(library(DESeq2))
 suppressMessages(library(pasilla))
@@ -69,7 +73,7 @@ This matrix will be our `annotation` input. Here the rownames are the sample nam
 
 ### Numeric Data
 
-The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq samples which will be our `data` input. The exons/genes are the rows, and the samples in the experiment are the columns. The following code extracts the counts from the pckage.
+The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq samples which will be our `data` input. The exons/genes are the rows, and the samples in the experiment are the columns. The following code extracts the counts from the package.
 
 ```{R}
 
@@ -160,8 +164,59 @@ ContrApption(data = normCountsSig, annotation = coldata)
     Note that users interested in this sort of experiment would generally re-run DESeq2 with a different experimental design: 
     >DESeq(DESeqDataSetFromMatrix(countData = cts, colData = coldata, design = ~ condition * type))
 
+## Crosstalk Integration
+
+ContrApption is [crosstalk](https://rstudio.github.io/crosstalk/index.html) compatible for usage with [datatable](https://rstudio.github.io/DT/). Users may leverage this by creating a shared data object and passing it to the `datatables` and `ContrApption` function. Selecting a row in the datatable will result in a call to visualize the selected row in ContrApption.
+
+```{R}
+
+normCountsSigShared <- SharedData$new(normCountsSig)
+
+# data table example from R crosstalks' site
+datatable(
+  normCountsSigShared,
+  extensions = "Scroller",
+  style = "bootstrap",
+  class = "compact",
+  width = "100%",
+  selection = 'single',
+  options = list(
+    deferRender = TRUE, scrollY = 300, scroller = TRUE
+  )
+)
+```
+
+A selection in the table will be reflected in ContrApption if the user passes the same shared data object:
+
+```{R}
+
+ContrApption(data = normCountsSigShared, annotation = coldata)
+```
+The user may also pass the two widgets to the `bscols` function and specifying the `bscolSize` argument to ContrApption so it will resize appropriately:
+
+```{R}
+
+# creates a side-by-side pair of widgets
+bscols(
+  # first column
+  datatable(
+    normCountsSigShared,
+    extensions = "Scroller",
+    style = "bootstrap",
+    class = "compact",
+    width = "100%",
+    selection = 'single',
+    options = list(
+        deferRender = TRUE,
+        scrollY = 300,
+        scroller = TRUE
+      )
+    ),
+  # second column
+  ContrApption(data = normCountsSigShared, annotation = coldata, bscolSize = TRUE)
+)
+```
 ```{R}
 
 sessionInfo()
 ```
-

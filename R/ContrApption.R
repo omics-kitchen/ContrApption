@@ -16,9 +16,9 @@
 ContrApption <- function(
   data, 
   annotation,
-  # groupCol,
   plotName = "ContrApption",
-  yAxisName = NULL
+  yAxisName = NULL,
+  bscolSize = FALSE
 ) {
 
   # preserve for htmlwidget; we're not using explicity
@@ -47,9 +47,9 @@ ContrApption <- function(
   inputs = list(
     data = data,
     annotation = annotation,
-    # groupCol = groupCol,
     plotName = plotName,
     yAxisName = yAxisName,
+    bscolSize = bscolSize,
     settings = list(
       crosstalk_key = key,
       crosstalk_group = group
