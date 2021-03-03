@@ -94,7 +94,7 @@ ContrApption <- function(
 #' @name ContrApption-shiny
 #'
 #' @export
-ContrApptionOutput <- function(outputId, width = '100%', height = '400px'){
+ContrApptionOutput <- function(outputId, width = '100%', height = '400px') {
   htmlwidgets::shinyWidgetOutput(outputId, 'ContrApption', width, height, package = 'ContrApption')
 }
 

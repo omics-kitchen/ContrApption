@@ -1,3 +1,5 @@
+
+
 HTMLWidgets.widget({
 
   name: 'ContrApption',
@@ -6,29 +8,50 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
-    /* create blank plot in global scope */
-    var plot = Plotly.plot(graphDiv = el, data = [],config = {responsive: true});
+    /* global variables  */
+    var plot = Plotly.plot(graphDiv = el, data = [], config = {responsive: true});
+    var plotName;
+    var yAxisName;
+    var layout;
+    var selectedGene;
+    var selectedGroup;
+    var geneDropdownName;
+    var groupDropdownName;
+    var dropDownWidth;
+    var plotlyData;
+
+    // var ns = {
+    //   plot: Plotly.plot(
+    //     graphDiv = el,
+    //     data = [],
+    //     config = { responsive: true }
+    //   ),
+    //   plotName: plotName,
+    //   yAxisName: yAxisName,
+    //   layout: layout, 
+    //   selectedGene: selectedGene,
+    //   selectedGroup: selectedGroup,
+    //   geneDropdownName: geneDropdownName,
+    //   groupDropdownName: groupDropdownName, 
+    //   dropDownWidth: dropDownWidth, 
+    //   plotlyData: plotlyData
+    // }
 
     // crosstalk handle
     var sel_handle = new crosstalk.SelectionHandle();
 
-    // the rest of the logic is conducted in the rendering  function
     return {
-
+      
       renderValue: function(inputs) {
-
 
         /* define the core functions */
 
         // associates samples to groups (sorts to experiment and control, etc)
         function mapSamplesToGroups(annotation, groupCol){
-
           // a list of every state we've seen so far
           let statesObserved = [];
-
           // the actual map of samples to their group state
           let stateMap = {};
-          
           // for every i in 0 -> the sample length
           for(let i = 0; i < annotation.sampleID.length; i++){
             // the sample is the value of sampleID there
@@ -46,13 +69,10 @@ HTMLWidgets.widget({
           return {states: statesObserved, map: stateMap};
         }
 
-
         // filters data to gene of interest while preserving groups
         function filterGroupDataByGene(d, gene, sampleMetadata){
-
           // the list of possible gene
           geneList = Object.values(d['gene']);
-
           // establish the index of the gene we want
           let geneIndex = null;          
           for(i in geneList){
@@ -60,10 +80,8 @@ HTMLWidgets.widget({
               geneIndex = i;
             }
           }
-
           let states = sampleMetadata.states;
           let samplesMap = sampleMetadata.map;
-
           // on object to store results neatly
           results = {};
           // fir each state
@@ -83,7 +101,6 @@ HTMLWidgets.widget({
           }
           return results;
         }
-
 
         // creates an array of traces for plotly
         function formatDataForPlotly(d) {
@@ -109,7 +126,6 @@ HTMLWidgets.widget({
           return output
         }
 
-
         // for making dropdown IDs (permits multiple widgets per Rmd)
         // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
         function makeid(length) {
@@ -122,12 +138,27 @@ HTMLWidgets.widget({
           return result;
         }
 
+        function updateGobalGeneAndGroup() {
+          selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+          selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
+        }
+
+        function updateLayout() {
+          return {
+            title: '<b>' + plotName + '</b> <br>' + selectedGene,
+            autosize: false,
+            height: height * 0.9,
+            width: width * 0.9,
+            margin: { l: 10, r: 10, b: 75, t: 35, pad: 10 },
+            yaxis: {
+              title: yAxisName,
+              titlefont: { family: 'Arial, sans-serif', size: 12, color: 'grey' }
+            }
+          }
+        }
 
         function updatePlotlyData() {
           // get the gene currently check in the dropdown
-          let selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
-          let selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
-
           let stateMap = mapSamplesToGroups(annotation, selectedGroup);
           // re-filter data based on that gene
           let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
@@ -135,76 +166,66 @@ HTMLWidgets.widget({
           return formatDataForPlotly(filteredData);
         }
 
+        function UpdatePlotFromDropdown(){
+          updateGobalGeneAndGroup();
+          layout = updateLayout(); 
+          plotlyData = updatePlotlyData()
+          Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
+        }
+
+        function updatePlotFromCrosstalk(e){
+          if (e.sender !== sel_handle) {
+            selectedGene = e.value[0]
+            layout = updateLayout(); 
+            plotlyData = updatePlotlyData()
+            Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
+          }
+        }
+
 
         /* unpack inputs from R */
 
         let dataSet = inputs.data;
         let annotation = inputs.annotation;
-        let plotName = inputs.plotName;
-        let yAxisName = inputs.yAxisName;
-        let bscolSize = inputs.bscolSize;
-        console.log(bscolSize)
         let allTranscripts = dataSet['gene'];
         let allGroups = Object.keys(annotation);
 
-        if(bscolSize == true){
-          console.log(bscolSize)
-          width = width/2
-        }
+        // globals
+        plotName = inputs.plotName;
+        yAxisName = inputs.yAxisName;
+        
+        // let bscolSize = inputs.bscolSize;
+
+        // if(bscolSize == true){
+        //   console.log(bscolSize)
+        //   width = width/2
+        // }
+
 
         /* get initial data and create initial plot */
 
         // start on the first gene in the list
-        let initialGene = allTranscripts[0];
-        let initialGroup = allGroups[0];
+        selectedGene = allTranscripts[0];
+        selectedGroup = allGroups[0];
 
-        // assign each sample a state based on the group of interest (disease/control, etc)
-        let stateMap = mapSamplesToGroups(annotation, initialGroup);
+        layout = updateLayout(); 
+        plotlyData = updatePlotlyData()
 
-        // use the statemap to sort the entries for a specific gene
-        let filteredData = filterGroupDataByGene(dataSet, initialGene, stateMap);
+        Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
 
-        // format that data for plotly
-        let plotlyData = formatDataForPlotly(filteredData);
 
-        // create a layout for the new plot
-        var layout = {
-          title: plotName,
-          autosize: false,
-          height: height * 0.9,
-          width: width * 0.9,
-          margin: {
-            l: 10,  
-            r: 10,
-            b: 75,
-            t: 35,
-            pad: 10
-          },
-          yaxis: {
-            title: yAxisName,
-            titlefont: {
-              family: 'Arial, sans-serif',
-              size: 12,
-              color: 'grey'
-            }
-          }
-        }
+        /* structure the HTML components of the app */
 
         // pad the bottom the widget to make room
         d3.select(el).style("padding-bottom", "15px")
 
-        // update the empty plot with the data
-        Plotly.react(graphDiv = el, data = plotlyData, layout = layout);
-
-
-        /* add dropdown and handle updates to it */
-
         // make dropdown id (permits multiple widgets per book)
         let dropdownID = makeid(15)
         let dropdownOuter = "dropdown-outer-" + dropdownID
-        let geneDropdownName = "dropdown-gene" + dropdownID
-        let groupDropdownName = "dropdown-group" + dropdownID
-        let dropDownWidth = 0.3 * width
+
+        geneDropdownName = "dropdown-gene" + dropdownID
+        groupDropdownName = "dropdown-group" + dropdownID
+        dropDownWidth = 0.3 * width
 
         // an outer div in which to place the two dropdown
         d3.select(el)
@@ -243,44 +264,24 @@ HTMLWidgets.widget({
           .attr("value", function (d) { return d; })  // puts the data (gene names as the options)
           .text(function (d) { return d; })           // adds the text of the gene to the display
 
-
-
-        
         // add the searchble dropdown
-        new SlimSelect({
-          select: "#" + geneDropdownName
-        })
+        new SlimSelect({ select: "#" + geneDropdownName })
 
-        new SlimSelect({
-          select: "#" + groupDropdownName
-        })
+        new SlimSelect({ select: "#" + groupDropdownName })
 
-        // handle updates to the dropdown
+
+        /* handle inputs, updates */
+
+        // gene dropdown
         d3.select("#" + geneDropdownName)
-          .on("change", function(){
-            Plotly.react(graphDiv = el, data = updatePlotlyData(), layout = layout)
-          })
+          .on("change", function(){ UpdatePlotFromDropdown(); })
 
+        // group dropdown
         d3.select("#" + groupDropdownName)
-          .on("change", function(){
-            Plotly.react(graphDiv = el, data = updatePlotlyData(), layout = layout)
-          })
-
+          .on("change", function(){ UpdatePlotFromDropdown(); })
         
-
-        sel_handle.on("change", function(e) {
-          if (e.sender !== sel_handle) {
-            // get the gene currently check in the dropdown
-            let selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
-            let selectedGene = e.value[0]
-            let stateMap = mapSamplesToGroups(annotation, selectedGroup);
-            // re-filter data based on that gene
-            let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
-            // format the dataset for plotly
-            Plotly.react(graphDiv = el, data = formatDataForPlotly(filteredData), layout = layout)
-          }
-        })
-        
+        // from crosstalk
+        sel_handle.on("change", function(e) { updatePlotFromCrosstalk(e); })
         sel_handle.setGroup(inputs.settings.crosstalk_group);
           
         // sel_handle.on("change", function(e) {
@@ -292,17 +293,32 @@ HTMLWidgets.widget({
       }, // renderValue
 
 
-
-
+      
       resize: function(width, height) {
-        // TODO: code to re-render the widget with a new size
-        // plot.width(width-30).height(height-30)(false);
-      },
+        
+        console.log("resize called")
 
+        d3.select(el)
+          .select("svg")
+          .attr("width", width)
+          .attr("height", height);
+        
+        let dropDownWidth = 0.3 * width
+
+        d3.select("#" + geneDropdownName)
+          .style("width", dropDownWidth + "px")
+        
+        d3.select("#" + groupDropdownName)
+          .style("width", dropDownWidth + "px")
+        
+        layout = updateLayout();
+        
+        Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
+      },
 
       // advised by docs, not sure how I'd use it
       plot: plot
 
-    }; // return 
+    };  // return 
   } // factory
-});
+}); // widget
