@@ -143,7 +143,13 @@ HTMLWidgets.widget({
         function updateFromCrosstalk(event) {
           if (event.sender !== selHandle) {
             layout = updateLayout(plotName, event.value[0], yAxisName, height, width)
-            plotlyData = updatePlotlyData()
+
+            if(!event.value[0]) {
+              let selectedGene = d3.select('#' + groupDropdownName + ' option:checked').text();
+            } else {
+              selectedGene = event.value[0]
+            }
+            plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
           }
         }

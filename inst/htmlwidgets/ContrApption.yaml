@@ -14,5 +14,5 @@ dependencies:
    stylesheet: slimselect.css
  - name: contrapptiontools
    version: 0.0.0
-   src: "htmlwidgets/lib/contrapptiontools"
+   src: "htmlwidgets/lib/contrapptiontools-0.0.0"
    script: contrapptiontools.js

@@ -68,10 +68,10 @@ function generateID(length) {
   return result;
 }
 
-function updateSelections(groupDropdownName, geneDropdownName) {
-  selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
-  selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
-}
+// function updateSelections(groupDropdownName, geneDropdownName) {
+//   selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+//   selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
+// }
 
 function updateLayout(plotName, selectedGene, yAxisName, height, width) {
   return {
@@ -111,6 +111,7 @@ function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup) {
     // return the list of possible states and the map IDs to states
     return {states: statesObserved, map: stateMap};
   }
+
   // get the gene currently check in the dropdown
   let stateMap = mapSamplesToGroups(annotation, selectedGroup);
   // re-filter data based on that gene
