@@ -142,15 +142,16 @@ HTMLWidgets.widget({
 
         function updateFromCrosstalk(event) {
           if (event.sender !== selHandle) {
-            layout = updateLayout(plotName, event.value[0], yAxisName, height, width)
-
-            if(!event.value[0]) {
-              let selectedGene = d3.select('#' + groupDropdownName + ' option:checked').text();
+            if(typeof event.value[0] == "undefined") {
+              let selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
             } else {
               selectedGene = event.value[0]
             }
+            layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
             plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
+            // let element = document.getElementById(geneDropdownName);
+            // element.value = selectedGene;
           }
         }
 
