@@ -18,7 +18,7 @@ ContrApption <- function(
   annotation,
   plotName = "ContrApption",
   yAxisName = NULL,
-  bscolSize = FALSE
+  scaleWidth = 1
 ) {
 
   # preserve for htmlwidget; we're not using explicity
@@ -49,7 +49,7 @@ ContrApption <- function(
     annotation = annotation,
     plotName = plotName,
     yAxisName = yAxisName,
-    bscolSize = bscolSize,
+    scaleWidth = scaleWidth,
     settings = list(
       crosstalk_key = key,
       crosstalk_group = group
@@ -66,13 +66,15 @@ ContrApption <- function(
     elementId = elementId,
     dependencies = crosstalk::crosstalkLibs(),
     sizingPolicy = htmlwidgets::sizingPolicy(
-      viewer.suppress = FALSE,
-      knitr.figure = FALSE,
-      padding = 15,
-      knitr.defaultWidth = 650,
-      knitr.defaultHeight = 430,
-      browser.defaultWidth = 750,
-      browser.defaultHeight = 530,
+      defaultWidth = 950, 
+      defaultHeight = 530, 
+      # viewer.suppress = FALSE,
+      # knitr.figure = FALSE,
+      # padding = 15,
+      # knitr.defaultWidth = 650,
+      # knitr.defaultHeight = 430,
+      # browser.defaultWidth = 750,
+      # browser.defaultHeight = 530,
       browser.fill = FALSE
     )
   )

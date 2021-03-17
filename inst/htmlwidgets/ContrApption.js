@@ -8,7 +8,7 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
 
     /* global variables  */
-    var plot = Plotly.plot(graphDiv = el, data = [], config = {responsive: true});
+    var plot = Plotly.plot(graphDiv = el, data = [])//, config = {responsive: true});
     var plotlyData;
     // need to be passed to renderValue and resize
     var plotName;
@@ -30,6 +30,8 @@ HTMLWidgets.widget({
 
         let dataSet = inputs.data;
         let annotation = inputs.annotation;
+        let scaleWidth = inputs.scaleWidth;
+        width = width * scaleWidth;
         let allTranscripts = dataSet['gene'];
         let allGroups = Object.keys(annotation);
 
@@ -41,10 +43,8 @@ HTMLWidgets.widget({
 
         // if(bscolSize == true){
         //   console.log(bscolSize)
-        //   width = width/2
+          // width = width/2
         // }
-
-
 
         /* ---------- get initial data and create initial plot ---------- */
 
@@ -66,15 +66,15 @@ HTMLWidgets.widget({
         /* ---------- structure the HTML components of the app ---------- */ 
 
         // make dropdown id (permits multiple widgets per book)
-        let dropdownID = generateID(15)
-        let dropdownOuter = "dropdown-outer-" + dropdownID
+        var dropdownID = generateID(15)
+        var dropdownOuter = "dropdown-outer-" + dropdownID
         
         // make unique names for gene and group dropdown with the IDs
         geneDropdownName = "dropdown-gene" + dropdownID
         groupDropdownName = "dropdown-group" + dropdownID
 
-        // make the dropdowns 30 of the width each
-        dropDownWidth = 0.3 * width
+        // make the dropdowns 25% of the width each
+        dropDownWidth = 0.25 * width
 
         // pad the bottom the widget to make room
         d3.select(el).style("padding-bottom", "15px")
@@ -180,27 +180,26 @@ HTMLWidgets.widget({
       
       resize: function(width, height) {
         
+        // adjust the size of the main element
         d3.select(el)
           .select("svg")
           .attr("width", width)
           .attr("height", height);
         
-        let dropDownWidth = 0.3 * width
+        // adjust the size of the dropdowns
+        d3.select(el)
+          .selectAll(".ss-main")
+          .style("width", 0.25 * width + "px")
+        
+        // update plotly
+        layout = updateLayout(plotName, selectedGene, yAxisName, height, width);
 
-        d3.select("#" + geneDropdownName)
-          .style("width", dropDownWidth + "px")
-        
-        d3.select("#" + groupDropdownName)
-          .style("width", dropDownWidth + "px")
-        
-        layout = updateLayout();
-        
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
       },
 
       // advised by docs, not sure how I'd use it
       plot: plot
 
-    };  // return 
+    }; // return 
   } // factory
 }); // widget
