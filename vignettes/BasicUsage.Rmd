@@ -14,8 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-
 ContrApption allows users to easily create a boxplot that responds to user input via a dropdown menu without using JavaScript and with minimal R usage. It requires 3 inputs:
 
   * A matrix or data.frame of numeric data to visualize where the columns are the samples in the experiment ("numeric data").
@@ -147,7 +145,7 @@ ContrApption operates on experimental factors with an arbitrary numbers of level
 
 ```{R}
 
-# derive a new variable - every combitation of condition and type
+# derive a new variable - every combination of condition and type
 coldata$interaction <- paste0(coldata$condition, ":", coldata$type)
 
 head(coldata)
@@ -171,34 +169,15 @@ ContrApption is [crosstalk](https://rstudio.github.io/crosstalk/index.html) comp
 ```{R}
 
 normCountsSigShared <- SharedData$new(normCountsSig)
-
-# data table example from R crosstalks' site
-datatable(
-  normCountsSigShared,
-  extensions = "Scroller",
-  style = "bootstrap",
-  class = "compact",
-  width = "100%",
-  selection = 'single',
-  options = list(
-    deferRender = TRUE, scrollY = 300, scroller = TRUE
-  )
-)
 ```
 
-A selection in the table will be reflected in ContrApption if the user passes the same shared data object:
-
-```{R}
-
-ContrApption(data = normCountsSigShared, annotation = coldata)
-```
 The user may also pass the two widgets to the `bscols` function and specifying the `bscolSize` argument to ContrApption so it will resize appropriately:
 
 ```{R}
 
-# creates a side-by-side pair of widgets
+# # creates a side-by-side pair of widgets
 bscols(
-  # first column
+  ContrApption(data = normCountsSigShared, annotation = coldata, scaleWidth = 0.5), # makes room for other widgets
   datatable(
     normCountsSigShared,
     extensions = "Scroller",
@@ -210,13 +189,12 @@ bscols(
         deferRender = TRUE,
         scrollY = 300,
         scroller = TRUE
-      )
-    ),
-  # second column
-  ContrApption(data = normCountsSigShared, annotation = coldata, bscolSize = TRUE)
+    )
+  )
 )
 ```
-```{R}
 
+```{R}
+# devtools::install(); library(ContrApption); ContrApption(data = normCountsSigShared, annotation = coldata)
 sessionInfo()
 ```

@@ -11,6 +11,7 @@
 #' base the grouping of the input data.
 #' @param plotName A title for the plot. Defaults to "ContrApption"
 #' @param yAxisName A title for the y axis. Defaults to NULL
+#' @param scaleWidth Factor to multiply the width of the widget by. Defaults to 1.
 #' 
 #' @export
 ContrApption <- function(
@@ -25,6 +26,8 @@ ContrApption <- function(
   width <- NULL
   height <- NULL
   elementId <- NULL
+
+  checkContrApptionInput(data = data, annotation = annotation)
 
   if (crosstalk::is.SharedData(data)) {
     # Using Crosstalk

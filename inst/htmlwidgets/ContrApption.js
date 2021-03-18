@@ -150,8 +150,9 @@ HTMLWidgets.widget({
             layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
             plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
-            // let element = document.getElementById(geneDropdownName);
-            // element.value = selectedGene;
+            let element = document.getElementById(geneDropdownName);
+            element.value = selectedGene;
+            console.log(element.value)
           }
         }
 
