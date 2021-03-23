@@ -21,11 +21,12 @@ HTMLWidgets.widget({
     var dropDownWidth;
     // crosstalk handle
     var selHandle = new crosstalk.SelectionHandle();
+    var ctFilter = new crosstalk.FilterHandle();
 
     return {
       
       renderValue: function(inputs) {
-
+        console.log("hear me roar")
         /* ---------- unpack inputs from R ---------- */
 
         let dataSet = inputs.data;
@@ -138,6 +139,7 @@ HTMLWidgets.widget({
           plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
           //update the plotly graph 
           Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
+          selHandle.set([selectedGene])
         }
 
         function updateFromCrosstalk(event) {
@@ -150,9 +152,7 @@ HTMLWidgets.widget({
             layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
             plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
-            let element = document.getElementById(geneDropdownName);
-            element.value = selectedGene;
-            console.log(element.value)
+            // selHandle.set(event.value[0])
           }
         }
 
