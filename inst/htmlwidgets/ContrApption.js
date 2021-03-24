@@ -26,10 +26,10 @@ HTMLWidgets.widget({
     return {
       
       renderValue: function(inputs) {
-        console.log("hear me roar")
         /* ---------- unpack inputs from R ---------- */
 
-        let dataSet = inputs.data;
+        let dataSet = inputs.countsData;
+        let dataExpr = inputs.data;
         let annotation = inputs.annotation;
         let scaleWidth = inputs.scaleWidth;
         width = width * scaleWidth;
@@ -39,13 +39,6 @@ HTMLWidgets.widget({
         // globals
         plotName = inputs.plotName;
         yAxisName = inputs.yAxisName;
-        
-        // let bscolSize = inputs.bscolSize;
-
-        // if(bscolSize == true){
-        //   console.log(bscolSize)
-          // width = width/2
-        // }
 
         /* ---------- get initial data and create initial plot ---------- */
 
@@ -124,9 +117,6 @@ HTMLWidgets.widget({
         new SlimSelect({ select: "#" + geneDropdownName })
 
 
-
-
-
         /* ---------- handle inputs, updates ---------- */
 
         function updateFromDropDowns(groupDropdownName, geneDropdownName) {
@@ -143,6 +133,7 @@ HTMLWidgets.widget({
         }
 
         function updateFromCrosstalk(event) {
+          console.log(event)
           if (event.sender !== selHandle) {
             if(typeof event.value[0] == "undefined") {
               let selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();

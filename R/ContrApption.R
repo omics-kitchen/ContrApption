@@ -15,7 +15,8 @@
 #' 
 #' @export
 ContrApption <- function(
-  data, 
+  data,
+  countsData,
   annotation,
   plotName = "ContrApption",
   yAxisName = NULL,
@@ -49,6 +50,7 @@ ContrApption <- function(
 
   inputs = list(
     data = data,
+    countsData = countsData,
     annotation = annotation,
     plotName = plotName,
     yAxisName = yAxisName,
