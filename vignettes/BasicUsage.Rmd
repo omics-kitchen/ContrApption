@@ -115,29 +115,17 @@ normCountsSig <- normCounts %>%
 normCountsSig %>% nrow
 ```
 
-## Examples
+## Basic Examples
 
-### Two-factor Examples
+### Counts Example
 
-We pass the dataset and the annotation file to ContrApption, resulting in a widget with a dropdown menu of features and boxplots of the input data grouped as directed. 
-
-```{R}
-
-ContrApption(data = normCountsSig, annotation = coldata)
-```
-
-
-Users may create multiple widgets per book. In this experiment there is more than one experimental factor, so we can create another widget based on a different group. We may also use the optional y-axis label anf plot title arguments argument.
+The simplest way to use ContrApption is to pass these counts and the annotation to it via the `countsData` and `annotion` arguments. This creates a Boxplot that is responsive to user input for transcript and experimental group, both of which are searchable within the widget via a dropdown.
 
 ```{R}
 
-ContrApption(
-  data = normCountsSig,
-  annotation = coldata,
-  plotName = "DESeq2 normalized counts by sample types",
-  yAxisName = "counts"
-)
+ContrApption(countsData = normCountsSig, annotation = coldata)
 ```
+
 
 ### Interaction-style example
 
@@ -156,7 +144,7 @@ We can then use the function normally:
 ```{R}
 
 # pass our new variable
-ContrApption(data = normCountsSig, annotation = coldata)
+ContrApption(countsData = normCountsSig, annotation = coldata)
 ```
 
     Note that users interested in this sort of experiment would generally re-run DESeq2 with a different experimental design: 

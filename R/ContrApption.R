@@ -15,20 +15,21 @@
 #' 
 #' @export
 ContrApption <- function(
-  data,
-  countsData,
+  data = NULL,
+  countsData = NULL,
   annotation,
   plotName = "ContrApption",
   yAxisName = NULL,
   scaleWidth = 1
 ) {
 
+
   # preserve for htmlwidget; we're not using explicity
   width <- NULL
   height <- NULL
   elementId <- NULL
 
-  checkContrApptionInput(data = data, annotation = annotation)
+  # checkContrApptionInput(data = data, annotation = annotation)
 
   if (crosstalk::is.SharedData(data)) {
     # Using Crosstalk
@@ -40,13 +41,17 @@ ContrApption <- function(
     key <- NULL
     group <- NULL
   }
-  
+
+  # countsData <- data.frame(countsData)
+  # countsData$gene <- rownames(countsData)
+
   # make the gene name column
-  data <- data.frame(data)
-  data$gene <- rownames(data)
+  # data <- data.frame(data)
+  # data$gene <- rownames(data)
 
   annotation <- data.frame(annotation)
   annotation$sampleID <- rownames(annotation)
+
 
   inputs = list(
     data = data,
