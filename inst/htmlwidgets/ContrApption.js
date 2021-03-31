@@ -26,10 +26,14 @@ HTMLWidgets.widget({
     return {
       
       renderValue: function(inputs) {
+        
         /* ---------- unpack inputs from R ---------- */
 
-        console.log("hello")
         let dataSet = inputs.countsData;
+        if(inputs.usingCrosstalk == true){
+          dataSet = inputs.data
+        }
+        
         let dataExpr = inputs.data;
         let annotation = inputs.annotation;
         let scaleWidth = inputs.scaleWidth;
@@ -40,6 +44,8 @@ HTMLWidgets.widget({
         // globals
         plotName = inputs.plotName;
         yAxisName = inputs.yAxisName;
+
+
 
         /* ---------- get initial data and create initial plot ---------- */
 
@@ -134,7 +140,6 @@ HTMLWidgets.widget({
         }
 
         function updateFromCrosstalk(event) {
-          console.log(event)
           if (event.sender !== selHandle) {
             if(typeof event.value[0] == "undefined") {
               let selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();

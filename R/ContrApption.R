@@ -18,6 +18,7 @@ ContrApption <- function(
   data = NULL,
   countsData = NULL,
   annotation,
+  mode = "counts",
   plotName = "ContrApption",
   yAxisName = NULL,
   scaleWidth = 1
@@ -29,18 +30,28 @@ ContrApption <- function(
   height <- NULL
   elementId <- NULL
 
-  # checkContrApptionInput(data = data, annotation = annotation)
+  # if we're in counts mode, just pass the counds
+  if(mode == "counts" & !crosstalk::is.SharedData(data)) {
+    # make the gene name column
+    data <- data.frame(data)
+    data$gene <- rownames(data)
+    countsData <- data
+  }
 
-  if (crosstalk::is.SharedData(data)) {
+  if(crosstalk::is.SharedData(data)) {
     # Using Crosstalk
+    usingCrosstalk <- TRUE
     key <- data$key()
     group <- data$groupName()
     data <- data$origData()
   } else {
     # Not using Crosstalk
+    usingCrosstalk <- FALSE
     key <- NULL
     group <- NULL
   }
+
+
 
   # countsData <- data.frame(countsData)
   # countsData$gene <- rownames(countsData)
@@ -60,6 +71,8 @@ ContrApption <- function(
     plotName = plotName,
     yAxisName = yAxisName,
     scaleWidth = scaleWidth,
+    usingCrosstalk = usingCrosstalk,
+    mode = mode,
     settings = list(
       crosstalk_key = key,
       crosstalk_group = group

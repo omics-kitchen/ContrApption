@@ -34,6 +34,8 @@ checkContrApptionInput <- function(data, annotation)
       # if an rownames from anno don't match the cols in data, bail
       #isFALSE doesn't work here - all.equal returns string mismatch
       if(!isTRUE(all.equal(rownames(annotation), colnames(data)))) {
+        print(rownames(annotation))
+        print(colnames(data))
         stop(
           paste0(
             "Rownames of annotation do not match colnames of data",

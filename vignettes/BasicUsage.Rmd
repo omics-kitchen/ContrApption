@@ -164,22 +164,22 @@ The user may also pass the two widgets to the `bscols` function and specifying t
 ```{R}
 
 # # creates a side-by-side pair of widgets
-bscols(
-  ContrApption(data = normCountsSigShared, annotation = coldata, scaleWidth = 0.5), # makes room for other widgets
-  datatable(
-    normCountsSigShared,
-    extensions = "Scroller",
-    style = "bootstrap",
-    class = "compact",
-    width = "100%",
-    selection = 'single',
-    options = list(
-        deferRender = TRUE,
-        scrollY = 300,
-        scroller = TRUE
-    )
-  )
-)
+# bscols(
+#   ContrApption(data = normCountsSigShared, annotation = coldata, scaleWidth = 0.5), # makes room for other widgets
+#   datatable(
+#     normCountsSigShared,
+#     extensions = "Scroller",
+#     style = "bootstrap",
+#     class = "compact",
+#     width = "100%",
+#     selection = 'single',
+#     options = list(
+#         deferRender = TRUE,
+#         scrollY = 300,
+#         scroller = TRUE
+#     )
+#   )
+# )
 ```
 
 ```{R}

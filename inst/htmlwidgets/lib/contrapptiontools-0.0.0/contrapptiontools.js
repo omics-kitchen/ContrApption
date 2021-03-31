@@ -2,6 +2,9 @@
 
 // filters data to gene of interest while preserving groups
 function filterGroupDataByGene(d, gene, sampleMetadata) {
+  console.log(d)
+  // console.log(gene)
+  // console.log(sampleMetadata)
   // the list of possible gene
   geneList = Object.values(d['gene']);
   // establish the index of the gene we want
