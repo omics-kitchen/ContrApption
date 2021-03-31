@@ -26,7 +26,7 @@ HTMLWidgets.widget({
     return {
       
       renderValue: function(inputs) {
-        
+
         /* ---------- unpack inputs from R ---------- */
 
         let dataSet = inputs.countsData;
@@ -35,10 +35,12 @@ HTMLWidgets.widget({
         }
         
         let dataExpr = inputs.data;
+        let targetCol = inputs.targetCol;
         let annotation = inputs.annotation;
+        let annotationCol = inputs.annotationCol;
         let scaleWidth = inputs.scaleWidth;
         width = width * scaleWidth;
-        let allTranscripts = dataSet['gene'];
+        let allTranscripts = dataSet[targetCol];
         let allGroups = Object.keys(annotation);
 
         // globals
@@ -56,7 +58,7 @@ HTMLWidgets.widget({
         // create initial layout of the plot
         layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
         // get the data for current inputs
-        plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
+        plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol)
         // update the plot
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
 
@@ -133,7 +135,7 @@ HTMLWidgets.widget({
           // pass the new gene to the layout 
           layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
           // filter the data given the current selections
-          plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
+          plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol)
           //update the plotly graph 
           Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
           selHandle.set([selectedGene])
@@ -147,7 +149,7 @@ HTMLWidgets.widget({
               selectedGene = event.value[0]
             }
             layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
-            plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup)
+            plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
             // selHandle.set(event.value[0])
           }

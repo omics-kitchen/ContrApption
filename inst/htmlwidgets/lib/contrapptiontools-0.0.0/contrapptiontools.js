@@ -1,12 +1,9 @@
 /* define the core functions */
 
 // filters data to gene of interest while preserving groups
-function filterGroupDataByGene(d, gene, sampleMetadata) {
-  console.log(d)
-  // console.log(gene)
-  // console.log(sampleMetadata)
+function filterGroupDataByGene(d, gene, targetCol, sampleMetadata) {
   // the list of possible gene
-  geneList = Object.values(d['gene']);
+  geneList = Object.values(d[targetCol]);
   // establish the index of the gene we want
   let geneIndex = null;          
   for(i in geneList){
@@ -90,7 +87,7 @@ function updateLayout(plotName, selectedGene, yAxisName, height, width) {
   }
 }
 
-function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup) {
+function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol) {
 
   // associates samples to groups (sorts to experiment and control, etc)
   function mapSamplesToGroups(annotation, groupCol) {
@@ -101,7 +98,7 @@ function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup) {
     // for every i in 0 -> the sample length
     for(let i = 0; i < annotation[groupCol].length; i++){
       // the sample is the value of sampleID there
-      let sample = annotation['sampleID'][i];
+      let sample = annotation[annotationCol][i];
       // the group of that sample is the value of the groupcol at i
       let group = annotation[groupCol][i];
       // map the current ID to that group state
@@ -118,7 +115,7 @@ function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup) {
   // get the gene currently check in the dropdown
   let stateMap = mapSamplesToGroups(annotation, selectedGroup);
   // re-filter data based on that gene
-  let filteredData = filterGroupDataByGene(dataSet, selectedGene, stateMap);
+  let filteredData = filterGroupDataByGene(dataSet, selectedGene, targetCol, stateMap);
   // format the dataset for plotly
   return formatDataForPlotly(filteredData);
 }

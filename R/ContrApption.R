@@ -18,6 +18,8 @@ ContrApption <- function(
   data = NULL,
   countsData = NULL,
   annotation,
+  targetCol = "gene",
+  annotationCol = "sampleID",
   mode = "counts",
   plotName = "ContrApption",
   yAxisName = NULL,
@@ -32,6 +34,7 @@ ContrApption <- function(
 
   # if we're in counts mode, just pass the counds
   if(mode == "counts" & !crosstalk::is.SharedData(data)) {
+    # if we have counts, and not crosstalk, we are in normal mode
     # make the gene name column
     data <- data.frame(data)
     data$gene <- rownames(data)
@@ -68,6 +71,8 @@ ContrApption <- function(
     data = data,
     countsData = countsData,
     annotation = annotation,
+    targetCol = targetCol,
+    annotationCol = annotationCol,
     plotName = plotName,
     yAxisName = yAxisName,
     scaleWidth = scaleWidth,
@@ -91,13 +96,6 @@ ContrApption <- function(
     sizingPolicy = htmlwidgets::sizingPolicy(
       defaultWidth = 950, 
       defaultHeight = 530, 
-      # viewer.suppress = FALSE,
-      # knitr.figure = FALSE,
-      # padding = 15,
-      # knitr.defaultWidth = 650,
-      # knitr.defaultHeight = 430,
-      # browser.defaultWidth = 750,
-      # browser.defaultHeight = 530,
       browser.fill = FALSE
     )
   )
