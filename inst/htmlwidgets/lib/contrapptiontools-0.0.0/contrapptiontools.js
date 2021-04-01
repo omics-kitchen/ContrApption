@@ -74,22 +74,29 @@ function generateID(length) {
 // }
 
 function updateLayout(plotName, selectedGene, yAxisName, height, width) {
-  return {
+  let layout = {
     title: '<b>' + plotName + '</b> <br>' + selectedGene,
     autosize: false,
     height: height * 0.9,
     width: width * 0.9,
-    margin: { l: 10, r: 10, b: 75, t: 35, pad: 10 },
+    // margin: { l: 10, r: 10, b: 75, t: 35, pad: 10 },
+    xaxis:{},
     yaxis: {
       title: yAxisName,
-      titlefont: { family: 'Arial, sans-serif', size: 12, color: 'grey' }
+      titlefont: {
+        family: 'Arial, sans-serif',
+        size: 12,
+        color: 'grey'
+      }
     },
     legend: {
-      "orientation": "h"//,
-      // y: 0,
-      // x: 0.5
+      "orientation": "h",
+      x: 1,
+      y: 0.5
     }
   }
+  console.log(layout)
+  return layout
 }
 
 function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol) {

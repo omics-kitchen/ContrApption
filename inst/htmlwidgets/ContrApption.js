@@ -21,7 +21,6 @@ HTMLWidgets.widget({
     var dropDownWidth;
     // crosstalk handle for interactivivty across widgets
     var selHandle = new crosstalk.SelectionHandle();
-
     var useGeneDropDown = true;
 
 
