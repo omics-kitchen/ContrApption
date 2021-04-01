@@ -19,7 +19,7 @@ ContrApption <- function(
   countsData = NULL,
   annotation,
   targetCol = "gene",
-  annotationCol = "sampleID",
+  sampleCol = "sampleID",
   mode = "counts",
   plotName = "ContrApption",
   yAxisName = NULL,
@@ -39,6 +39,14 @@ ContrApption <- function(
     data <- data.frame(data)
     data$gene <- rownames(data)
     countsData <- data
+  }
+
+  if(mode == "expression" & crosstalk::is.SharedData(data)) {
+    # if we have counts, and not crosstalk, we are in normal mode
+    # make the gene name column
+    # data <- data.frame(data)
+    # data$gene <- rownames(data)
+    # countsData <- data
   }
 
   if(crosstalk::is.SharedData(data)) {
@@ -72,7 +80,7 @@ ContrApption <- function(
     countsData = countsData,
     annotation = annotation,
     targetCol = targetCol,
-    annotationCol = annotationCol,
+    sampleCol = sampleCol,
     plotName = plotName,
     yAxisName = yAxisName,
     scaleWidth = scaleWidth,

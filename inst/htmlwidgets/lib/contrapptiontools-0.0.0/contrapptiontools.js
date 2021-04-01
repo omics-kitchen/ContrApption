@@ -83,11 +83,16 @@ function updateLayout(plotName, selectedGene, yAxisName, height, width) {
     yaxis: {
       title: yAxisName,
       titlefont: { family: 'Arial, sans-serif', size: 12, color: 'grey' }
+    },
+    legend: {
+      "orientation": "h"//,
+      // y: 0,
+      // x: 0.5
     }
   }
 }
 
-function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol) {
+function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol) {
 
   // associates samples to groups (sorts to experiment and control, etc)
   function mapSamplesToGroups(annotation, groupCol) {
@@ -98,7 +103,7 @@ function updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targ
     // for every i in 0 -> the sample length
     for(let i = 0; i < annotation[groupCol].length; i++){
       // the sample is the value of sampleID there
-      let sample = annotation[annotationCol][i];
+      let sample = annotation[sampleCol][i];
       // the group of that sample is the value of the groupcol at i
       let group = annotation[groupCol][i];
       // map the current ID to that group state

@@ -8,7 +8,7 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
 
     /* global variables  */
-    var plot = Plotly.plot(graphDiv = el, data = [])//, config = {responsive: true});
+    var plot = Plotly.plot(graphDiv = el, data = [])
     var plotlyData;
     // need to be passed to renderValue and resize
     var plotName;
@@ -19,9 +19,11 @@ HTMLWidgets.widget({
     var geneDropdownName;
     var groupDropdownName;
     var dropDownWidth;
-    // crosstalk handle
+    // crosstalk handle for interactivivty across widgets
     var selHandle = new crosstalk.SelectionHandle();
-    var ctFilter = new crosstalk.FilterHandle();
+
+    var useGeneDropDown = true;
+
 
     return {
       
@@ -30,20 +32,26 @@ HTMLWidgets.widget({
         /* ---------- unpack inputs from R ---------- */
 
         let dataSet = inputs.countsData;
-        if(inputs.usingCrosstalk == true){
+        let dataExpr = inputs.data;
+
+        if(inputs.usingCrosstalk == true && inputs.mode == "counts"){
           dataSet = inputs.data
         }
+
+        if(inputs.usingCrosstalk == true && inputs.mode == "expression"){
+          dataSet = inputs.countsData
+          dataExpr = inputs.data;
+          useGeneDropDown = false;
+        }
         
-        let dataExpr = inputs.data;
         let targetCol = inputs.targetCol;
         let annotation = inputs.annotation;
-        let annotationCol = inputs.annotationCol;
+        let sampleCol = inputs.sampleCol;
         let scaleWidth = inputs.scaleWidth;
         width = width * scaleWidth;
         let allTranscripts = dataSet[targetCol];
         let allGroups = Object.keys(annotation);
 
-        // globals
         plotName = inputs.plotName;
         yAxisName = inputs.yAxisName;
 
@@ -58,7 +66,7 @@ HTMLWidgets.widget({
         // create initial layout of the plot
         layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
         // get the data for current inputs
-        plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol)
+        plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol)
         // update the plot
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
 
@@ -77,7 +85,7 @@ HTMLWidgets.widget({
         groupDropdownName = "dropdown-group" + dropdownID
 
         // make the dropdowns 25% of the width each
-        dropDownWidth = 0.25 * width
+        dropDownWidth = 0.4 * width
 
         // pad the bottom the widget to make room
         d3.select(el).style("padding-bottom", "15px")
@@ -88,8 +96,8 @@ HTMLWidgets.widget({
           .attr("id", dropdownOuter)
           .style("padding-bottom", "30px")
           .lower()
-        
-        // add the 'group' dropdown to the selector div
+
+                  // add the 'group' dropdown to the selector div
         d3.select("#" + dropdownOuter)
           .append("select")                           // add a select element
           .style("float", "left")                     // float to the left of the div
@@ -103,9 +111,9 @@ HTMLWidgets.widget({
           .append("option")                           // adds options 
           .attr("value", function (d) { return d; })  // puts the data (gene names as the options)
           .text(function (d) { return d; })           // adds the text of the gene to the display
-        
-        // add search to dropdown
-        new SlimSelect({ select: "#" + groupDropdownName })
+      
+      // add search to dropdown
+      new SlimSelect({ select: "#" + groupDropdownName })
 
         // add the 'gene' dropdown to the selector div
         d3.select("#" + dropdownOuter)
@@ -123,24 +131,36 @@ HTMLWidgets.widget({
           .text(function (d) { return d; })           // adds the text of the gene to the display
 
         // add search to dropdown
-        new SlimSelect({ select: "#" + geneDropdownName })
+        new SlimSelect({ select: "#" + geneDropdownName }) 
+
+
+
+
 
 
         /* ---------- handle inputs, updates ---------- */
 
+        // update the plot from dropdown input
         function updateFromDropDowns(groupDropdownName, geneDropdownName) {
           // note current selections
           selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+
           selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
+
           // pass the new gene to the layout 
           layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
           // filter the data given the current selections
-          plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol)
+          plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol)
           //update the plotly graph 
           Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
-          selHandle.set([selectedGene])
+
+          if(useGeneDropDown) {
+            selHandle.set([selectedGene])
+          }
+
         }
 
+        // update the plot from crosstalk input
         function updateFromCrosstalk(event) {
           if (event.sender !== selHandle) {
             if(typeof event.value[0] == "undefined") {
@@ -149,30 +169,35 @@ HTMLWidgets.widget({
               selectedGene = event.value[0]
             }
             layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
-            plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, annotationCol)
+            plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
-            // selHandle.set(event.value[0])
           }
         }
 
         // update from gene dropdown
         d3.select("#" + geneDropdownName)
-          .on("change", function(){ updateFromDropDowns(groupDropdownName, geneDropdownName); })
+          .on("change", function(){
+            updateFromDropDowns(groupDropdownName, geneDropdownName);
+          })
 
         // update from group dropdown
         d3.select("#" + groupDropdownName)
-          .on("change", function(){ updateFromDropDowns(groupDropdownName, geneDropdownName); })
-        
+          .on("change", function(){
+            updateFromDropDowns(groupDropdownName, geneDropdownName); 
+          })
+
+        // turn off the dropdown if we're not using it
+        if(!useGeneDropDown) {
+          dropDownHTML = document.getElementById(dropdownOuter).children
+          dropDownHTML[0].style.display = 'none';
+          dropDownHTML[1].style.display = 'none';
+        }
+
+
         // update from crosstalk
         selHandle.on("change", function(event) { updateFromCrosstalk(event) })
 
         selHandle.setGroup(inputs.settings.crosstalk_group);
-          
-        // selHandle.on("change", function(e) {
-        //   if (e.sender !== selHandle) {
-        //     console.log(e.value[0])
-        //   }
-        // })
 
       }, // renderValue
 
@@ -189,7 +214,7 @@ HTMLWidgets.widget({
         // adjust the size of the dropdowns
         d3.select(el)
           .selectAll(".ss-main")
-          .style("width", 0.25 * width + "px")
+          .style("width", 0.4 * width + "px")
         
         // update plotly
         layout = updateLayout(plotName, selectedGene, yAxisName, height, width);
