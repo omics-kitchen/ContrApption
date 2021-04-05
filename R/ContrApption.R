@@ -32,22 +32,23 @@ ContrApption <- function(
   height <- NULL
   elementId <- NULL
 
-  # if we're in counts mode, just pass the counds
+  # if we're in counts mode, just pass the counts
   if(mode == "counts" & !crosstalk::is.SharedData(data)) {
     # if we have counts, and not crosstalk, we are in normal mode
     # make the gene name column
     data <- data.frame(data)
-    data$gene <- rownames(data)
+
+    if(targetCol == "gene") {
+        data$gene <- rownames(data)
+    } # or else we're using the user specified column
     countsData <- data
   }
 
-  if(mode == "expression" & crosstalk::is.SharedData(data)) {
-    # if we have counts, and not crosstalk, we are in normal mode
-    # make the gene name column
-    # data <- data.frame(data)
-    # data$gene <- rownames(data)
-    # countsData <- data
-  }
+  annotation <- data.frame(annotation)
+
+  if(sampleCol == "sampleID") {
+    annotation$sampleID <- rownames(annotation)
+  } # or else we're using the user specified column
 
   if(crosstalk::is.SharedData(data)) {
     # Using Crosstalk
@@ -62,17 +63,6 @@ ContrApption <- function(
     group <- NULL
   }
 
-
-
-  # countsData <- data.frame(countsData)
-  # countsData$gene <- rownames(countsData)
-
-  # make the gene name column
-  # data <- data.frame(data)
-  # data$gene <- rownames(data)
-
-  annotation <- data.frame(annotation)
-  annotation$sampleID <- rownames(annotation)
 
 
   inputs = list(

@@ -29,7 +29,7 @@ HTMLWidgets.widget({
       renderValue: function(inputs) {
 
         /* ---------- unpack inputs from R ---------- */
-
+        console.log(inputs)
         let dataSet = inputs.countsData;
         let dataExpr = inputs.data;
 
@@ -37,9 +37,13 @@ HTMLWidgets.widget({
           dataSet = inputs.data
         }
 
-        if(inputs.usingCrosstalk == true && inputs.mode == "expression"){
+        if(inputs.mode == "diff-expression"){
           dataSet = inputs.countsData
           dataExpr = inputs.data;
+          useGeneDropDown = false;
+        }
+
+        if(inputs.usingCrosstalk == true) {
           useGeneDropDown = false;
         }
         
@@ -49,6 +53,7 @@ HTMLWidgets.widget({
         let scaleWidth = inputs.scaleWidth;
         width = width * scaleWidth;
         let allTranscripts = dataSet[targetCol];
+
         let allGroups = Object.keys(annotation);
 
         plotName = inputs.plotName;

@@ -3,31 +3,40 @@ title: "ContrApption"
 output: rmarkdown::html_notebook
 ---
 
-ContrApption allows users to easily create a boxplot that responds to user input via a dropdown menu without using JavaScript and with minimal R usage. It requires 3 inputs:
+ContrApption allows users to easily create an interactive JavaScript widget that accepts user input via a searchable drop-down menu and produces boxplot visualizations of targets in RNA-Seq and similarly structured datasets. This permits easy, visual inspection of results from a single function call in R and, because ContrApption is written in JavaScript and runs in a browser, sharing of those results without hosting a Shiny server. For the most basic usage, ContrApption simply requires:
 
   * A matrix or data.frame of numeric data to visualize where the columns are the samples in the experiment ("numeric data").
   * A matrix or data.frame of meta describing the experimental features of the experiment and which samples
   belong to which experimental conditions ("annotation data").
-  * The name of an experimental factor (as a string) by which to group the input data
-    
-Note that the row names of the annotation data must mach the column names of the numeric data. This is reflect the requirements of the RNA-Seq
-experiments for which ContrApption was designed. An intuitive visualization of this data structure can be found on page 5 of the [Beginner’s guide to using the DESeq2 package](https://bioc.ism.ac.jp/packages/2.14/bioc/vignettes/DESeq2/inst/doc/beginner.pdf). There is no reason a users from other domains with data in the same structure cannot use the tool however, as the inputs required are simply strings and numbers.
+   
+Note that the row names of the annotation data must mach the column names of the numeric data. This reflects the requirements of the RNA-Seq
+experiments for which ContrApption was designed. An intuitive visualization of this data structure can be found on page 5 of the [Beginner’s guide to using the DESeq2 package](https://bioc.ism.ac.jp/packages/2.14/bioc/vignettes/DESeq2/inst/doc/beginner.pdf). There is no reason a user from other domains with data in the same structure cannot use the tool however, as the inputs required are simply strings and numbers.
 
-## Dependencies
+For more complex usage, the user may also provide differential expression data and create a shared data object so the dataset can be visualized in the crosstalk-compatible [DT](https://rstudio.github.io/DT/) widget and ContrApption simultaneously.
+
+In this vignette we will walk through simple and complex usage of ContrApption with the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) used in the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
+
+## Vignette Dependencies
 
 We load the requires libraries:
 
 ```{r setup}
 devtools::install()
 library(ContrApption)
-library(dplyr)
+library(tidyverse)
 
 # libraries for optional integration
 library(DT)
 library(crosstalk)
 
-suppressMessages(library(DESeq2))
-suppressMessages(library(pasilla))
+suppressMessages(
+  {
+    library(DESeq2)
+    library(edgeR)
+    library(limma)
+    library(pasilla)
+  }
+)
 ```
 
 ## Dataset
@@ -53,10 +62,11 @@ coldata <- data.frame(coldata[ , c("condition","type")])
 # remove un-needed characters
 rownames(coldata) <- gsub("fb", "", rownames(coldata))
 
+# visualize our metadata
 coldata
 ```
 
-This matrix will be our `annotation` input. Here the rownames are the sample names of the experiment and either 'condition' or 'type' may be used as a group for `groupCol`.
+This matrix will be our `annotation` input. Here the rownames are the sample names of the experiment.
 
 ### Numeric Data
 
@@ -64,7 +74,7 @@ The Pasilla dataset contains per-exon and per-gene read counts of RNA-seq sample
 
 ```{R}
 
-# loads counts file from the pasilla package 
+# loads counts file from the pasilla package
 pasCts <- system.file("extdata", "pasilla_gene_counts.tsv",
                       package = "pasilla", mustWork = TRUE)
 
@@ -74,115 +84,84 @@ cts <- read.csv(pasCts, sep = "\t", row.names = "gene_id")
 # make sure the order is correct
 cts <- cts[, rownames(coldata)]
 
+# examine the counts
 head(cts)
 ```
 
-### DESeq2
+We now have all we need to run DESeq2 and thus to run ContrApption.
 
-We can create a DESeq2 dataset and then extract the normalized counts for visualization.
+## DESeq2 Normalized Counts Example
+
+We can create a DESeq2 dataset, run DESeq2 on it, and then extract the normalized counts for visualization.
 
 ```{R}
 
 # create a DESeq2 dataset from the metadata and counts
 dds <- DESeq(DESeqDataSetFromMatrix(countData = cts, colData = coldata, design = ~ condition))
 
+# extract the normalized counts
 normCounts <- counts(dds, normalized = TRUE)
+
+head(normCounts)
 ```
+
 
 Given that embedding multiples widgets with 14599 rows of data may lead to performance issues, the user may want to focus one genes of interest as determined by the differential expression experiment:
 
 ```{R}
 
+# extract significant results
 res <- results(dds, tidy = TRUE) %>% 
   data.frame %>% 
   filter(padj < 0.05)
 
+# get the counts for signficant transcripts
 normCountsSig <- normCounts %>%
   data.frame %>% 
   filter(rownames(.) %in% res$row)
-  
+
 normCountsSig %>% nrow
 ```
-
-## Examples
-
-### Two-factor Examples
-
-We pass the dataset and the annotation file to ContrApption, resulting in a widget with a dropdown menu of features and boxplots of the input data grouped as directed. 
-
 ```{R}
 
-ContrApption(data = normCountsSig, annotation = coldata)
-```
+# create a column for out targets
+normCountsSig$geneToob <- rownames(normCountsSig)
 
-
-Users may create multiple widgets per book. In this experiment there is more than one experimental factor, so we can create another widget based on a different group. We may also use the optional y-axis label anf plot title arguments argument.
-
-```{R}
-
-ContrApption(
-  data = normCountsSig,
-  annotation = coldata,
-  plotName = "DESeq2 normalized counts by sample types",
-  yAxisName = "counts"
-)
-```
-
-### Interaction-style example
-
-ContrApption operates on experimental factors with an arbitrary numbers of levels. We can use this to subset by multiple factors of interest but merging the columns of the annotation file.
-
-```{R}
-
-# derive a new variable - every combination of condition and type
-coldata$interaction <- paste0(coldata$condition, ":", coldata$type)
-
-head(coldata)
-```
-
-We can then use the function normally:
-
-```{R}
-
-# pass our new variable
-ContrApption(data = normCountsSig, annotation = coldata)
-```
-
-    Note that users interested in this sort of experiment would generally re-run DESeq2 with a different experimental design: 
-    >DESeq(DESeqDataSetFromMatrix(countData = cts, colData = coldata, design = ~ condition * type))
-
-## Crosstalk Integration
-
-ContrApption is [crosstalk](https://rstudio.github.io/crosstalk/index.html) compatible for usage with [datatable](https://rstudio.github.io/DT/). Users may leverage this by creating a shared data object and passing it to the `datatables` and `ContrApption` function. Selecting a row in the datatable will result in a call to visualize the selected row in ContrApption.
-
-```{R}
-
+# create a shared data object
 normCountsSigShared <- SharedData$new(normCountsSig)
 ```
 
-The user may also pass the two widgets to the `bscols` function and specifying the `bscolSize` argument to ContrApption so it will resize appropriately:
+For organizational purposes, We pass the two widgets to the `bscols` function from the "crosstalk" package, and then specify the `scaleWidth` argument to ContrApption so it will resize appropriately:
 
 ```{R}
 
 # # creates a side-by-side pair of widgets
-bscols(
-  ContrApption(data = normCountsSigShared, annotation = coldata, scaleWidth = 0.5), # makes room for other widgets
+pairedWidgetsCounts <- bscols(
+
+  # the datatable widget
   datatable(
     normCountsSigShared,
     extensions = "Scroller",
     style = "bootstrap",
     class = "compact",
     width = "100%",
-    selection = 'single',
+    selection = 'single', # ContrApption works on one target at a time
     options = list(
-        deferRender = TRUE,
-        scrollY = 300,
-        scroller = TRUE
+      deferRender = TRUE,
+      scrollY = 300,
+      scroller = TRUE
     )
+  ),
+
+  # the ContrApption widget
+  ContrApption(
+    data = normCountsSigShared,
+    annotation = coldata,
+    scaleWidth = 0.5, # makes room for other widgets,
+    targetCol = "geneToob"
   )
+
 )
-```
-```{R}
-# devtools::install(); library(ContrApption); ContrApption(data = normCountsSigShared, annotation = coldata)
-sessionInfo()
+
+pairedWidgetsCounts
 ```

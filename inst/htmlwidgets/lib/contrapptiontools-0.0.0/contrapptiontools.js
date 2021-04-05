@@ -95,7 +95,6 @@ function updateLayout(plotName, selectedGene, yAxisName, height, width) {
       y: 0.5
     }
   }
-  console.log(layout)
   return layout
 }
 
