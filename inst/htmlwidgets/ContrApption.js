@@ -29,7 +29,6 @@ HTMLWidgets.widget({
       renderValue: function(inputs) {
 
         /* ---------- unpack inputs from R ---------- */
-        console.log(inputs)
         let dataSet = inputs.countsData;
         let dataExpr = inputs.data;
 

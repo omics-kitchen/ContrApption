@@ -5,11 +5,15 @@
 \title{<Add Title>}
 \usage{
 ContrApption(
-  data,
+  data = NULL,
+  countsData = NULL,
   annotation,
-  groupCol,
+  targetCol = "gene",
+  sampleCol = "sampleID",
+  mode = "counts",
   plotName = "ContrApption",
-  yAxisName = NULL
+  yAxisName = "Expression",
+  scaleWidth = 1
 )
 }
 \arguments{
@@ -19,12 +23,14 @@ The column names of this input must match the rownames of the \code{annotation} 
 \item{annotation}{The metadata on each sample (column in \code{data}) denoting which expermental group each
 sample (column) the sample belongs to. The rownames of this must match the column names of `data.}
 
-\item{groupCol}{The column in the annotation file that contains the experimental factor on which to
-base the grouping of the input data.}
-
 \item{plotName}{A title for the plot. Defaults to "ContrApption"}
 
 \item{yAxisName}{A title for the y axis. Defaults to NULL}
+
+\item{scaleWidth}{Factor to multiply the width of the widget by. Defaults to 1.}
+
+\item{groupCol}{The column in the annotation file that contains the experimental factor on which to
+base the grouping of the input data.}
 }
 \description{
 <Add Description>

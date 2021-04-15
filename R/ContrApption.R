@@ -2,7 +2,7 @@
 #'
 #' <Add Description>
 #'
-#' @import htmlwidgets dplyr DESeq2 pasilla
+#' @import htmlwidgets crosstalk dplyr DESeq2 pasilla 
 #' @param data The dataset to visualize, where row names are features and each column is a sample.
 #' The column names of this input must match the rownames of the `annotation` file.
 #' @param annotation The metadata on each sample (column in `data`) denoting which expermental group each
@@ -22,7 +22,7 @@ ContrApption <- function(
   sampleCol = "sampleID",
   mode = "counts",
   plotName = "ContrApption",
-  yAxisName = NULL,
+  yAxisName = "Expression",
   scaleWidth = 1
 ) {
 
