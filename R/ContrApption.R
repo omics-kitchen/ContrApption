@@ -23,6 +23,7 @@ ContrApption <- function(
   mode = "counts",
   plotName = "ContrApption",
   yAxisName = "Expression",
+  showLegend = FALSE,
   scaleWidth = 1
 ) {
 
@@ -74,6 +75,7 @@ ContrApption <- function(
     sampleCol = sampleCol,
     plotName = plotName,
     yAxisName = yAxisName,
+    showLegend = showLegend,
     scaleWidth = scaleWidth,
     usingCrosstalk = usingCrosstalk,
     mode = mode,

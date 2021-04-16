@@ -176,7 +176,7 @@ The most basic usage of ContrApption is to pass counts and annotations to it. We
 createContrApption(counts = normCountsSig, annotation = coldata)
 ```
 
-Users may customize the title and y-axis labels of the plot by setting the `plotName` and `yAxisName` arguments. The `showLegend` argument turns on the plot legend.
+Users may customize the title and y-axis labels of the plot by setting the `plotName` and `yAxisName` arguments.
 
 ```{R}
 
@@ -184,8 +184,7 @@ createContrApption(
   counts = normCountsSig,
   annotation = coldata,
   plotName = "DESeq2 normalized counts by sample types",
-  yAxisName = "norm. counts", 
-  showLegend = TRUE
+  yAxisName = "norm. counts"
 )
 ```
 
@@ -278,7 +277,7 @@ Users interested in customizing the paired widgets are encouraged to visit the d
 
 #### Counts
 
-This block demonstrates how different components of `createContrApption` function work. A customized `datatables` widget is made, and passed to `crosstalk`'s `bscols` function along with a `ContrApption` widget to create a pair.
+This block demonstrates how the `pairedCountsWidget` function works. A customized `datatables` widget is made, and passed to `crosstalk`'s `bscols` function along with a `ContrApption` widget to create a pair.
 
 ```{R}
 

@@ -9,7 +9,8 @@ createContrApption <- function(
   plotName = "ContrApption",
   yAxisName = "Expression",
   targetCol = "gene",
-  sampleCol = "sampleID"
+  sampleCol = "sampleID",
+  showLegend = FALSE
   )
 {
   
@@ -23,7 +24,8 @@ createContrApption <- function(
         yAxisName = yAxisName,
         plotName = plotName,
         targetCol = targetCol,
-        sampleCol = sampleCol
+        sampleCol = sampleCol,
+        showLegend = showLegend
       )
     )
   }
@@ -41,6 +43,7 @@ createContrApption <- function(
       plotName = plotName,
       targetCol = targetCol,
       sampleCol = sampleCol,
+      showLegend = showLegend,
       scaleWidth = 0.5 # makes room for other widgets
     )
 
@@ -65,7 +68,7 @@ createContrApption <- function(
   }
 
   # DT table of DE results
-  dtWidget <- datatable(
+  dtWidget <- DT::datatable(
     dtData,
     extensions = "Scroller",
     style = "bootstrap",
@@ -85,7 +88,7 @@ createContrApption <- function(
       )
     )
   ) %>% 
-  formatStyle(columns = seq(1, ncol(dtData$origData())), fontSize = '75%')
+  DT::formatStyle(columns = seq(1, ncol(dtData$origData())), fontSize = '75%')
 
   bscols(dtWidget, contrWidget)
 

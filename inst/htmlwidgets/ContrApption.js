@@ -19,6 +19,7 @@ HTMLWidgets.widget({
     var geneDropdownName;
     var groupDropdownName;
     var dropDownWidth;
+    var showLegend;
     // crosstalk handle for interactivivty across widgets
     var selHandle = new crosstalk.SelectionHandle();
     var useGeneDropDown = true;
@@ -57,6 +58,7 @@ HTMLWidgets.widget({
 
         plotName = inputs.plotName;
         yAxisName = inputs.yAxisName;
+        showLegend = inputs.showLegend;
 
 
 
@@ -67,7 +69,7 @@ HTMLWidgets.widget({
         selectedGroup = allGroups[0];
 
         // create initial layout of the plot
-        layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
+        layout = updateLayout(plotName, selectedGene, yAxisName, height, width, showLegend)
         // get the data for current inputs
         plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol)
         // update the plot
@@ -151,7 +153,7 @@ HTMLWidgets.widget({
           selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
 
           // pass the new gene to the layout 
-          layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
+          layout = updateLayout(plotName, selectedGene, yAxisName, height, width, showLegend)
           // filter the data given the current selections
           plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol)
           //update the plotly graph 
@@ -171,7 +173,7 @@ HTMLWidgets.widget({
             } else {
               selectedGene = event.value[0]
             }
-            layout = updateLayout(plotName, selectedGene, yAxisName, height, width)
+            layout = updateLayout(plotName, selectedGene, yAxisName, height, width, showLegend)
             plotlyData = updatePlotlyData(annotation, dataSet, selectedGene, selectedGroup, targetCol, sampleCol)
             Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
           }
@@ -220,7 +222,7 @@ HTMLWidgets.widget({
           .style("width", 0.4 * width + "px")
         
         // update plotly
-        layout = updateLayout(plotName, selectedGene, yAxisName, height, width);
+        layout = updateLayout(plotName, selectedGene, yAxisName, height, width, showLegend);
 
         Plotly.react(graphDiv = el, data = plotlyData, layout = layout)
       },

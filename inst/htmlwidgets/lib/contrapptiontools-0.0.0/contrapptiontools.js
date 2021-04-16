@@ -73,7 +73,7 @@ function generateID(length) {
 //   selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
 // }
 
-function updateLayout(plotName, selectedGene, yAxisName, height, width) {
+function updateLayout(plotName, selectedGene, yAxisName, height, width, showLegend) {
   let layout = {
     title: '<b>' + plotName + '</b> <br>' + selectedGene,
     autosize: false,
@@ -93,7 +93,8 @@ function updateLayout(plotName, selectedGene, yAxisName, height, width) {
       "orientation": "h",
       x: 1,
       y: 0.5
-    }
+    },
+    showlegend: showLegend
   }
   return layout
 }
