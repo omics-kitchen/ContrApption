@@ -3,6 +3,9 @@ dev/
 inst/doc
 doc
 Meta
+.DS_Store
+.Rbuildignore
+.Rhistory
 *.sh
 *.html
 *.RData
