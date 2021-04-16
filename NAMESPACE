@@ -2,12 +2,8 @@
 
 export(ContrApption)
 export(ContrApptionOutput)
-export(pairedCountsWidget)
-export(pairedDiffExWidget)
-export(pairedWidget)
+export(createContrApption)
 export(renderContrApption)
-import(DESeq2)
 import(crosstalk)
 import(dplyr)
 import(htmlwidgets)
-import(pasilla)

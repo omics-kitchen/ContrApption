@@ -25,9 +25,7 @@ RoxygenNote: 7.1.1
 Imports:
     htmlwidgets,
     crosstalk,
-    dplyr,
-    DESeq2,
-    pasilla
+    dplyr
 Suggests: 
     knitr,
     rmarkdown

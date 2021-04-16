@@ -2,7 +2,7 @@
 #'
 #' <Add Description>
 #'
-#' @import htmlwidgets crosstalk dplyr DESeq2 pasilla 
+#' @import htmlwidgets crosstalk dplyr
 #' @param data The dataset to visualize, where row names are features and each column is a sample.
 #' The column names of this input must match the rownames of the `annotation` file.
 #' @param annotation The metadata on each sample (column in `data`) denoting which expermental group each
@@ -49,6 +49,7 @@ ContrApption <- function(
   if(sampleCol == "sampleID") {
     annotation$sampleID <- rownames(annotation)
   } # or else we're using the user specified column
+  annotation[, sampleCol]
 
   if(crosstalk::is.SharedData(data)) {
     # Using Crosstalk
