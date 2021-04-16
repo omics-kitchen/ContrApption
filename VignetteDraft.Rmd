@@ -16,6 +16,7 @@ For more complex usage, the user may create a shared data object from the counts
 
 In this vignette we will walk through simple and complex usage of ContrApption with the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) used in the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
+
 ## Vignette Dependencies
 
 We load the requires libraries:
@@ -37,6 +38,21 @@ suppressMessages(
     library(pasilla)
   }
 )
+```
+
+## Quick start
+
+ContrApption provides function for several styles of interactive boxplot-based widgets for the interactive exploration of RNA-Seq or similarly structured data. The three primary modes are 1) boxplot, 2) boxplot and counts table, and 3) boxplot differential expression table.
+```{R}
+
+load("ContrApptionBasic.RData")
+```
+
+The 
+```{R}
+
+# the basic usage of ContrApption
+ContrApption(data = normCountsSig, annotation = coldata)
 ```
 
 ## Dataset
@@ -122,6 +138,8 @@ normCountsSig <- normCounts %>%
   format(digits = 2)
 
 normCountsSig %>% nrow
+
+save
 ```
 
 When used without crosstalk, ContrApption will look for rownnames to determine the list of targets of the targets. If there is an existing column the user would like to use, they can change this behavior by specifying a `targetCol` argument. Similarly, the the sample IDs are assumed to be the rownames of the annotation file, but the user may specify a column using the `sampleCol` argument.
@@ -194,19 +212,16 @@ We're  now ready to use the cross-enabled function of ContrApption.
 
 #### Paried-widget counts function
 
-The `pairedCountsWidget` will create a side-by-side pair of widgets - one showing the counts and one showing the ContrApption visualization. It simply takes the same `data` and `annotation` arguments as in the basic usage above, but data is now a shared object.
+The `pairedWidget` will create a side-by-side pair of widgets - one showing the counts and one showing the ContrApption visualization. To use it in this manner simply pass a shared counts object to the `counts` argument and the column data to`annotation`.
 
-```{R}
-
-pairedCountsWidget(data = normCountsSigShared, annotation = coldata)
-```
 ```{R}
 
 pairedWidget(counts = normCountsSigShared, annotation = coldata)
 ```
+
 ### Differential Expression Data
 
-Users may also be interested in viewing the results of tests for differential expression with the visualizations provided. This can be achieved by creating a shared data object from the results table and passing `"diff-expression"` to the `mode` argument of ContrApption. This disables the dropdown for the target column in ContrApption as it is no longer needed when the user has a searchable table. The usage is similar to the above, the shared object is created from the expression data (as this is the data that both widgets need, only ContrApption will need the counts), and counts are passed as supplemental information using the `counts` argument. Also note that the `gene`, or other target name column must be created before passing the data to `SharedData$new`.
+Users may also be interested in viewing the results of tests for differential expression with the visualizations provided. Also note that the `gene`, or other target name column must be created before passing the data to `SharedData$new`.
 
 ```{R}
 
@@ -227,16 +242,17 @@ resShared <- SharedData$new(res)
 
 #### Paried-widget differential expression function
 
-The DE version of the paired widget takes the following arguments: `deResults` for the DE table, `counts` for the counts, and `annotation` for the annotation/column data. 
+The `pairedWidget` function can also be used with differential expression results data. To use the function in this manner, pass the shared DE results table as a shared object to the `deResults` argument, the non-shared counts to `counts`, and the coldata to `annotation`.
 
 ```{R}
 
-pairedDiffExWidget(deResults = resShared, counts = normCountsSig, annotation = coldata)
+pairedWidget(deResults = resShared, counts = normCountsSig, annotation = coldata)
+
 ```
 
 ```{R}
 
-pairedWidget(counts = normCountsSig, deResults = resShared, annotation = coldata)
+save.image("ContrApptionBasic.RData")
 ```
 ## Advanced Usage
 
@@ -294,7 +310,7 @@ pairedWidgetsCounts
 
 #### Differential Expression
 
-This example show the same as above, with minor modification to incorporate DE results. Most notable, the shared object is created from the expression data, and counts are passed as supplemental information using the `counts` argument.
+This example show the same as above, with minor modification to incorporate DE results. Most notable, the shared object is created from the expression data, and counts are passed as supplemental information using the `counts` argument. This can be achieved by creating a shared data object from the results table and passing `"diff-expression"` to the `mode` argument of ContrApption. This disables the dropdown for the target column in ContrApption as it is no longer needed when the user has a searchable table. 
 
 ```{R}
 
