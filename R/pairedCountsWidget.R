@@ -21,13 +21,14 @@ pairedCountsWidget <- function(data, annotation)
         scrollY = 300,
         sScrollX = "100%",
         pagingType = "simple",
-          initComplete = JS(
-            "function(settings, json) {",
-              "$(this.api().table().header()).css({'font-size': '75%'});",
-            "}"
+        initComplete = JS(
+          "function(settings, json) {",
+            "$(this.api().table().header()).css({'font-size': '75%'});",
+          "}"
         )
       )
-    ) %>% formatStyle(columns = seq(1, ncol(data$origData())), fontSize = '75%'),
+    ) %>%
+    formatStyle(columns = seq(1, ncol(data$origData())), fontSize = '75%'),
     # ContrApption widget
     ContrApption(
       data = data,

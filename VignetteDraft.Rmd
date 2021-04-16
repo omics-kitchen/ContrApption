@@ -200,7 +200,10 @@ The `pairedCountsWidget` will create a side-by-side pair of widgets - one showin
 
 pairedCountsWidget(data = normCountsSigShared, annotation = coldata)
 ```
+```{R}
 
+pairedWidget(counts = normCountsSigShared, annotation = coldata)
+```
 ### Differential Expression Data
 
 Users may also be interested in viewing the results of tests for differential expression with the visualizations provided. This can be achieved by creating a shared data object from the results table and passing `"diff-expression"` to the `mode` argument of ContrApption. This disables the dropdown for the target column in ContrApption as it is no longer needed when the user has a searchable table. The usage is similar to the above, the shared object is created from the expression data (as this is the data that both widgets need, only ContrApption will need the counts), and counts are passed as supplemental information using the `counts` argument. Also note that the `gene`, or other target name column must be created before passing the data to `SharedData$new`.
@@ -231,6 +234,10 @@ The DE version of the paired widget takes the following arguments: `deResults` f
 pairedDiffExWidget(deResults = resShared, counts = normCountsSig, annotation = coldata)
 ```
 
+```{R}
+
+pairedWidget(counts = normCountsSig, deResults = resShared, annotation = coldata)
+```
 ## Advanced Usage
 
 This section of the vignette demonstrates the methods used in the ContrApption internals to leverage `datatables` for users interested in creating customized widgets.

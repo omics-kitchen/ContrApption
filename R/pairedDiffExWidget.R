@@ -25,9 +25,10 @@ pairedDiffExWidget <- function(deResults, counts, annotation)
             "function(settings, json) {",
               "$(this.api().table().header()).css({'font-size': '75%'});",
             "}"
+          )
         )
-      )
-    ) %>% formatStyle(columns = seq(1, ncol(deResults$origData())), fontSize = '75%'),
+      ) %>% 
+      formatStyle(columns = seq(1, ncol(deResults$origData())), fontSize = '75%'),
 
     # ContrApption widget
     ContrApption(
