@@ -33,24 +33,49 @@ ContrApption <- function(
   height <- NULL
   elementId <- NULL
 
+  # the data argument type must be NULL, SharedData, or data.frame
+  if(!is.data.frame(data) & !crosstalk::is.SharedData(data) & !is.null(data)) {
+    stop(
+      paste(
+        "data argument must be a SharedData object or a data.frame: ", 
+        "recieved input of class:", class(data))
+    )
+  }
+
+  # the countsData argument type must be NULL, SharedData, or data.frame
+  if(!is.data.frame(countsData) & !crosstalk::is.SharedData(countsData) & !is.null(countsData)) {
+    stop(
+      paste(
+        "data argument must be a SharedData object or a data.frame: ", 
+        "recieved input of class:", class(countsData))
+    )
+  }
+
+  # the countsData argument type must be data.frame
+  if(!is.data.frame(annotation)) {
+    stop(
+      paste(
+        "data argument must be a SharedData object or a data.frame: ", 
+        "recieved input of class:", class(annotation))
+    )
+  }   
+
   # if we're in counts mode, just pass the counts
   if(mode == "counts" & !crosstalk::is.SharedData(data)) {
     # if we have counts, and not crosstalk, we are in normal mode
     # make the gene name column
     data <- data.frame(data)
 
+    # default to making a column named "gene"
     if(targetCol == "gene") {
         data$gene <- rownames(data)
     } # or else we're using the user specified column
     countsData <- data
   }
 
-  annotation <- data.frame(annotation)
-
   if(sampleCol == "sampleID") {
     annotation$sampleID <- rownames(annotation)
   } # or else we're using the user specified column
-  annotation[, sampleCol]
 
   if(crosstalk::is.SharedData(data)) {
     # Using Crosstalk
@@ -66,7 +91,7 @@ ContrApption <- function(
   }
 
 
-
+  # TODO: catch no usable targetCol here
   inputs = list(
     data = data,
     countsData = countsData,
