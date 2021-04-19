@@ -2,6 +2,8 @@
 ![interactive-counts](misc/interactive-counts.gif)
 ![differential-expression](misc/differential-expression.gif)
 
+<img src="misc/basic-counts.gif" width="250" height="250"/>
+
 Git workflow:
   dev: Working branch. New features are developed here.
   staging: Finished work from dev or a feature branch. Test in context here.
