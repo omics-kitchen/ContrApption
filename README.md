@@ -2,7 +2,7 @@
 ![interactive-counts](misc/interactive-counts.gif)
 ![differential-expression](misc/differential-expression.gif)
 
-<img src="misc/basic-counts.gif" width="250" height="250"/>
+<img src="misc/basic-counts.gif" width="1200" height="600"/>
 
 Git workflow:
   dev: Working branch. New features are developed here.
