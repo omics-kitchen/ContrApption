@@ -24,6 +24,12 @@ The most basic usage of `ContrApption` is to visualize counts in a boxplot.
 
 <img src="misc/differential-expression.gif"/>
 
+## Installation
+
+```R
+devtools::install_github("omics-kitchen/ContrApption")
+```
+
 ## Misc
 
 ### Git workflow
