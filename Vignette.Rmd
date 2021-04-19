@@ -21,7 +21,6 @@ In this vignette we will walk through simple and complex usage of ContrApption w
 We load the requires libraries:
 
 ```{r setup}
-devtools::install()
 library(ContrApption)
 library(tidyverse)
 
