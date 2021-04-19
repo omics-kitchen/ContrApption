@@ -1,6 +1,8 @@
 # ContrApption
 
-ContrApption interactively visualizes RNA-Seq style datasets from a single function call, using HTML to create sharable documents without the need to write or host a Shiny app. ContrApption interacts with other widgets using [crosstalk]().
+    Note: ContrApption is currently in beta testing
+
+ContrApption interactively visualizes RNA-Seq style datasets from a single function call, using HTML to create sharable documents without the need to write or host a Shiny app. ContrApption interacts with other widgets using [crosstalk](https://rstudio.github.io/crosstalk/).
 
 ## Modes
 

@@ -21,7 +21,6 @@ In this vignette we will walk through simple and complex usage of ContrApption w
 We load the requires libraries:
 
 ```{r setup}
-devtools::install()
 library(ContrApption)
 library(tidyverse)
 
@@ -46,7 +45,7 @@ suppressMessages(
 load("ContrApptionQuickStart.RData")
 ```
 
-ContrApption provides function for several styles of interactive boxplot-based widgets for the interactive exploration of RNA-Seq or similarly structured data. The three primary modes are 1) boxplot, 2) boxplot and counts table, and 3) boxplot differential expression table. We provide the `createContrApption` function that takes counts, annotation, and optional differential expression results. Based on the inputs and their `SharedData` status, ContrApption will infer the mode and produce widgets appropriately. Additionally, we expose the core `ContrApption` function for users who want more customize the way `ContrApption` interacts with the `DT` widget.
+ContrApption provides function for several styles of interactive boxplot-based widgets for the interactive exploration of RNA-Seq or similarly structured data. The three primary modes are 1) boxplot, 2) boxplot and counts table, and 3) boxplot and differential expression table. We provide the `createContrApption` function that takes counts, annotation, and optional differential expression results. Based on the inputs and their `SharedData` status, ContrApption will infer the mode and produce widgets appropriately. Additionally, we expose the core `ContrApption` function for users who want more customize the way `ContrApption` interacts with the `DT` widget.
 
 ### Counts boxplot
 
@@ -78,7 +77,7 @@ createContrApption(deResults = resShared, counts = normCountsSig, annotation = c
 
 ## Dataset
 
-This vignette makes use of [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption. The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) 
+The ContrApption ("Contrast App") vignette makes use of [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption. The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 ### Annotation Data and Groups
 
@@ -142,7 +141,7 @@ normCounts <- counts(dds, normalized = TRUE)
 head(normCounts)
 ```
 
-Given that embedding multiples widgets with 14599 rows of data may lead to performance issues, the user may want to focus one genes of interest as determined by the differential expression experiment:
+Given that embedding multiples widgets with 14599 rows of data may lead to performance issues, the user may want to focus on genes of interest as determined by the differential expression experiment:
 
 ```{R}
 
@@ -160,15 +159,15 @@ normCountsSig <- normCounts %>%
 normCountsSig %>% nrow
 ```
 
-When used without crosstalk, ContrApption will look for rownnames to determine the list of targets of the targets. If there is an existing column the user would like to use, they can change this behavior by specifying a `targetCol` argument. Similarly, the the sample IDs are assumed to be the rownames of the annotation file, but the user may specify a column using the `sampleCol` argument.
+When used without `crosstalk`, `ContrApption` will look for rownnames to determine the list of targets of the targets. If there is an existing column the user would like to use, they can change this behavior by specifying a `targetCol` argument. Similarly, the the sample IDs are assumed to be the rownames of the annotation file, but the user may specify a column using the `sampleCol` argument.
 
 ## Basic Usage
 
-We'll demonstrate the most straightforward use cases of ContrApption - visualizing count data and using pre-defined functions to leverage crosstalk compatibility.
+We'll demonstrate the most straightforward use cases of `ContrApption` - visualizing count data and using pre-defined functions to leverage `crosstalk` compatibility.
 
 ### Basic counts usage
 
-The most basic usage of ContrApption is to pass counts and annotations to it. We pass the dataset and the annotation file to ContrApption, resulting in a widget with a searchable drop-down menu of experimental features and boxplots of the input data grouped as directed. 
+The most basic usage of `ContrApption` is to pass counts and annotations to it. We pass the dataset and the annotation file to `ContrApption`, resulting in a widget with a searchable drop-down menu of experimental features and boxplots of the input data grouped as directed. 
 
 ```{R}
 
@@ -176,7 +175,7 @@ The most basic usage of ContrApption is to pass counts and annotations to it. We
 createContrApption(counts = normCountsSig, annotation = coldata)
 ```
 
-Users may customize the title and y-axis labels of the plot by setting the `plotName` and `yAxisName` arguments.
+Users may customize the title and y-axis labels of the plot by setting the `plotName` and `yAxisName` arguments. The `showLegend` argument turns on the plot legend.
 
 ```{R}
 
@@ -184,13 +183,14 @@ createContrApption(
   counts = normCountsSig,
   annotation = coldata,
   plotName = "DESeq2 normalized counts by sample types",
-  yAxisName = "norm. counts"
+  yAxisName = "norm. counts", 
+  showLegend = TRUE
 )
 ```
 
 ### Interaction-style example
 
-ContrApption operates on experimental factors with an arbitrary numbers of levels. We can leverage this to explore the interaction of multiple factors of interest by merging the columns of the annotation file.
+`ContrApption` operates on experimental factors with an arbitrary numbers of levels. We can leverage this to explore the interaction of multiple factors of interest by merging the columns of the annotation file.
 
 ```{R}
 
@@ -215,7 +215,7 @@ createContrApption(counts = normCountsSig, annotation = coldata)
 
 ### Counts
 
-ContrApption is [crosstalk](https://rstudio.github.io/crosstalk/index.html) compatible for usage with [DT](https://rstudio.github.io/DT/). Users may leverage this by creating a shared data object and passing it to the `datatables` and `ContrApption` functions to produce interactive widgets that react to inputs in one another. Selecting a row in the datatable will result in a call to visualize the selected row in ContrApption, and selecting a target in ContrApption will filter the table to that row in the datatable. ContrApption will not changed an object once it becomes a shared data object, and they do no have rownames, so when using crosstalk, create the "gene" column before creating the shared data object.
+`ContrApption` is [crosstalk](https://rstudio.github.io/crosstalk/index.html) compatible for usage with [DT](https://rstudio.github.io/DT/). Users may leverage this by creating a shared data object and passing it to the `datatables` and `ContrApption` functions to produce interactive widgets that react to inputs in one another. Selecting a row in the datatable will result in a call to visualize the selected row in `ContrApption`, and selecting a target in ContrApption will filter the table to that row in the datatable. `ContrApption` will not changed an object once it becomes a shared data object, and they do no have rownames, so when using `crosstalk`, create the "gene" column before creating the shared data object.
 
 ```{R}
 
@@ -226,11 +226,11 @@ normCountsSig$gene <- rownames(normCountsSig)
 normCountsSigShared <- SharedData$new(normCountsSig)
 ```
 
-We're  now ready to use the cross-enabled function of ContrApption.
+We're  now ready to use the cross-enabled function of `ContrApption.`
 
 #### Paried-widget counts function
 
-The `createContrApption` will create a side-by-side pair of widgets - one showing the counts and one showing the ContrApption visualization. To use it in this manner simply pass a shared counts object to the `counts` argument and the column data to`annotation`.
+The `createContrApption` will create a side-by-side pair of widgets - one showing the counts and one showing the `ContrApption` visualization. To use it in this manner simply pass a shared counts object to the `counts` argument and the column data to`annotation`.
 
 ```{R}
 
@@ -260,16 +260,16 @@ resShared <- SharedData$new(res)
 
 #### Paried-widget differential expression function
 
-The `createContrApption` function can also be used with differential expression results data. To use the function in this manner, pass the shared DE results table as a shared object to the `deResults` argument, the non-shared counts to `counts`, and the coldata to `annotation`.
+The `createContrApption` function can also be used with differential expression results data. To use the function in this manner, pass the shared differential expression results table as a shared object to the `deResults` argument, the non-shared counts to `counts`, and the "coldata" to `annotation`.
 
 ```{R}
 
 createContrApption(deResults = resShared, counts = normCountsSig, annotation = coldata)
 ```
 
-## Advanced Usage
+## Advanced usage
 
-This section of the vignette demonstrates the methods used in the ContrApption internals to leverage `datatables` for users interested in creating customized widgets.
+This section of the vignette demonstrates the methods used in the `ContrApption` internals to leverage `datatables` for users interested in creating customized widgets.
 
 ### Customizing the paired widget functions
 
@@ -277,7 +277,7 @@ Users interested in customizing the paired widgets are encouraged to visit the d
 
 #### Counts
 
-This block demonstrates how the `pairedCountsWidget` function works. A customized `datatables` widget is made, and passed to `crosstalk`'s `bscols` function along with a `ContrApption` widget to create a pair.
+This block demonstrates how different components of `createContrApption` function work. A customized `datatables` widget is made, and passed to `crosstalk`'s `bscols` function along with a `ContrApption` widget to create a pair.
 
 ```{R}
 
@@ -323,7 +323,7 @@ createContrApptionsCounts
 
 #### Differential Expression
 
-This example show the same as above, with minor modification to incorporate DE results. Most notable, the shared object is created from the expression data, and counts are passed as supplemental information using the `counts` argument. This can be achieved by creating a shared data object from the results table and passing `"diff-expression"` to the `mode` argument of ContrApption. This disables the dropdown for the target column in ContrApption as it is no longer needed when the user has a searchable table. 
+This example show the same as above, with minor modification to incorporate differential expression results. Most notable, the shared object is created from the expression data, and counts are passed as supplemental information using the `counts` argument. This can be achieved by creating a shared data object from the results table and passing `"diff-expression"` to the `mode` argument of `ContrApption.` This disables the dropdown for the target column in `ContrApption` as it is no longer needed when the user has a searchable table. 
 
 ```{R}
 
@@ -369,7 +369,7 @@ This section demonstrates additional examples in slightly different contexts and
 
 ### Example with limma-voom results
 
-This section shows a basic [limma-voom](https://bioconductor.org/packages/release/bioc/html/limma.html) DE analysis the ends in exploration of the results using `ContrApption`.
+This section shows a basic [limma-voom](https://bioconductor.org/packages/release/bioc/html/limma.html) differential expression analysis the ends in exploration of the results using `ContrApption`.
 
 #### Basic
 
@@ -380,7 +380,7 @@ We conduct a basic `limma-voom` analysis:
 # the experimental design matrix
 design <- model.matrix(~1 + condition, coldata)
 
-# edgeR DE list
+# edgeR differential expression list
 dge <- DGEList(counts = as.matrix(cts))
 
 # created index of non-expressed for filtration
@@ -465,7 +465,7 @@ createContrApptionsDELV
 
 #### Differential Expression
 
-An example with the interactive DE, customized explicitly:
+An example with the interactive differential expression, customized explicitly:
 
 ```{R}
 
@@ -517,6 +517,11 @@ normCountsSig$gene <- NULL
 # make our own
 normCountsSig$ArbitraryString <- rownames(normCountsSig)
 
+# stash rownames so we can add them back for next example
+rowNames <- rownames(normCountsSig)
+
+rownames(normCountsSig) <- NULL
+
 createContrApption(counts = normCountsSig, annotation = coldata, targetCol = "ArbitraryString")
 ```
 
@@ -525,6 +530,9 @@ createContrApption(counts = normCountsSig, annotation = coldata, targetCol = "Ar
 Using a user-specified column instead of the implicit rownames.
 
 ```{R}
+
+# restore rownames
+rownames(normCountsSig) <- rowNames
 
 # remove gene column
 normCountsSig$ArbitraryString <- NULL
@@ -538,7 +546,31 @@ rownames(coldata) <- NULL
 createContrApption(counts = normCountsSig, annotation = coldata, sampleCol = "MyCustomID")
 ```
 
+### Arbitrary data
+
+Given the simple inputs used by `ContrApption`, it can be used for any dataset that shared a structure with RNA-Seq experiments.
+
+```{R}
+
+arbData <- data.frame(one = c(1,5,3), two = c(1,5,3), three = c(5,1,3), four = c(5,1,3))
+
+arbData
+```
+
+```{R}
+
+arbSamples <- data.frame(sampleNames = c("one", "two", "three", "four"), group = c("A", "A", "B", "B"))
+
+arbSamples
+```
+
+```{R}
+
+createContrApption(counts = arbData, annotation = arbSamples, sampleCol = "sampleNames")
+```
+
 ```{R}
 
 sessionInfo()
 ``` 
+
