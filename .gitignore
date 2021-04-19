@@ -1,7 +1,8 @@
 .Rproj.user
 ContrApption.Rproj
 Test.Rmd
-Develop.Rmd
+Develop.
+*.nb.html
 dev/
 inst/doc
 doc
@@ -10,5 +11,4 @@ Meta
 .Rbuildignore
 .Rhistory
 *.sh
-*.html
 *.RData
