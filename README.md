@@ -16,7 +16,7 @@ The most basic usage of `ContrApption` is to visualize counts in a boxplot.
 
 ### Counts Table and Boxplot
 
-`ContrApption` is compatible with [DT](https://rstudio.github.io/DT/) via [crosstalk](https://rstudio.github.io/crosstalk/), allowing useres to interact with their datasest across a table and the boxplot.
+`ContrApption` is compatible with [DT](https://rstudio.github.io/DT/) via [crosstalk](https://rstudio.github.io/crosstalk/), allowing users to interact with their datasest across a table and the boxplot.
 
 <img src="misc/interactive-counts.gif"/>
 
