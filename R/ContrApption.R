@@ -80,6 +80,16 @@ ContrApption <- function(
         data$gene <- rownames(data)
     } # or else we're using the user specified column
     countsData <- data
+
+    # bail if we don't come out of here with a usable column name
+    if(!(targetCol %in% colnames(countsData))){
+      stop(
+        paste(
+          "can't find", targetCol, "column in  counts data"
+        )
+      )
+    }
+
   }
 
   # if we have the default name...
@@ -106,6 +116,8 @@ ContrApption <- function(
 
 
   # TODO: catch no usable targetCol/sampleCol here
+
+
   inputs = list(
     data = data,
     countsData = countsData,

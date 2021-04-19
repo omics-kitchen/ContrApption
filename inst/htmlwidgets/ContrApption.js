@@ -146,11 +146,14 @@ HTMLWidgets.widget({
         /* ---------- handle inputs, updates ---------- */
 
         // update the plot from dropdown input
-        function updateFromDropDowns(groupDropdownName, geneDropdownName) {
-          // note current selections
-          selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+        function updateFromDropDowns(groupDropdownName, geneDropdownName, updateType) {
 
-          selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
+          if(updateType == "group") {
+            selectedGroup = d3.select('#' + groupDropdownName + ' option:checked').text();
+          }
+          if(updateType == "gene") {
+            selectedGene = d3.select('#' + geneDropdownName + ' option:checked').text();
+          }
 
           // pass the new gene to the layout 
           layout = updateLayout(plotName, selectedGene, yAxisName, height, width, showLegend)
@@ -182,13 +185,13 @@ HTMLWidgets.widget({
         // update from gene dropdown
         d3.select("#" + geneDropdownName)
           .on("change", function(){
-            updateFromDropDowns(groupDropdownName, geneDropdownName);
+            updateFromDropDowns(groupDropdownName, geneDropdownName, "gene");
           })
 
         // update from group dropdown
         d3.select("#" + groupDropdownName)
           .on("change", function(){
-            updateFromDropDowns(groupDropdownName, geneDropdownName); 
+            updateFromDropDowns(groupDropdownName, geneDropdownName, "group"); 
           })
 
         // turn off the dropdown if we're not using it
