@@ -2,7 +2,7 @@
 
     Note: ContrApption is currently in beta testing
 
-ContrApption interactively visualizes RNA-Seq style datasets from a single function call, using HTML to create sharable documents without the need to write or host a Shiny app. ContrApption interacts with other widgets using [crosstalk](https://rstudio.github.io/crosstalk/).
+ContrApption interactively visualizes RNA-Seq style datasets from a single function call, using HTML to create sharable documents without the need to write or host a Shiny app. ContrApption interacts with other widgets using [crosstalk](https://rstudio.github.io/crosstalk/). For the full `ContrApption` vignette, click [here](https://omics-kitchen.github.io/ContrApption/#).
 
 ## Modes
 
@@ -31,6 +31,10 @@ The most basic usage of `ContrApption` is to visualize counts in a boxplot.
 ```R
 devtools::install_github("omics-kitchen/ContrApption")
 ```
+
+## Documentation
+
+See the full vignette [here](https://omics-kitchen.github.io/ContrApption/#).
 
 ## Misc
 
