@@ -78,7 +78,7 @@ createContrApption(deResults = resShared, counts = normCountsSig, annotation = c
 
 ## Dataset
 
-This vignette makes use of [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption. The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
+The ContrApption ("Contrast App") vignette makes use of [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and the [pasilla dataset](https://bioconductor.org/packages/release/data/experiment/html/pasilla.html) to demonstrate the intended use of ContrApption. The following is a modified version of the ["Count matrix input"](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) section of the [DESeq2 vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 ### Annotation Data and Groups
 

@@ -69,7 +69,8 @@ ContrApption <- function(
     )
   }   
 
-  # if we're in counts mode, just pass the counts
+  ### Simple Counts Mode
+  # if we're in simple counts mode, just pass the counts
   if(mode == "counts" & !crosstalk::is.SharedData(data)) {
     # if we have counts, and not crosstalk, we are in normal mode
     # make the gene name column
