@@ -1,17 +1,27 @@
-#' <Add Title>
+#' ContrApption
 #'
-#' <Add Description>
+#' Create interactive JavaScript widgets from single function call in R
 #'
 #' @import htmlwidgets crosstalk dplyr
-#' @param data The dataset to visualize, where row names are features and each column is a sample.
-#' The column names of this input must match the rownames of the `annotation` file.
+#' @param data The main dataset to visualize, where row names are features and each column is a sample.
+#' Pass counts in dataframe to make a widget a simple counts widget. Pass a shared counts object to make an
+#' interactive counts widget for use with a counts table. Pass a shared data differential expression results
+#' table or an interactive boxplot and DE table. See the 'createContrApption' function for a simple wrapper
+#' that infers the correct widget to produce from the inputs - the reccomended method for basic usage.
 #' @param annotation The metadata on each sample (column in `data`) denoting which expermental group each
+#' @param countsData The counts file - when using differential expression mode, use this argument to pass
+#' the counts as supplemental information so they can be visualized
 #' sample (column) the sample belongs to. The rownames of this must match the column names of `data.
-#' @param groupCol The column in the annotation file that contains the experimental factor on which to 
-#' base the grouping of the input data.
-#' @param plotName A title for the plot. Defaults to "ContrApption"
-#' @param yAxisName A title for the y axis. Defaults to NULL
-#' @param scaleWidth Factor to multiply the width of the widget by. Defaults to 1.
+#' @param targetCol The string name in the numeric dataset of the column that has the names of the tagets
+#' in it, ie, transcripts or genes in an RNA-Seq experiment.
+#' @param sampleCol The string name of the column in the annotation data that contains unique sample IDs.
+#' @param mode Counts mode or differential expression mode. See createContrApption function for a convineince 
+#' function to infer the correct widget to create from inputs. 
+#' @param plotName A title for the plot. Defaults to "ContrApption".
+#' @param yAxisName A title for the y axis. Defaults to Expression.
+#' @param showLegend Adds a basic legend to the plot. Defaults to FALSE.
+#' @param scaleWidth Factor to multiply the width of the widget by. Used decrease widget size for creating
+#' widgets from multiple sub-widgets with the bscols function from crosstalk. Defaults to 1.
 #' 
 #' @export
 ContrApption <- function(
@@ -26,7 +36,6 @@ ContrApption <- function(
   showLegend = FALSE,
   scaleWidth = 1
 ) {
-
 
   # preserve for htmlwidget; we're not using explicity
   width <- NULL
@@ -73,8 +82,13 @@ ContrApption <- function(
     countsData <- data
   }
 
+  # if we have the default name...
   if(sampleCol == "sampleID") {
-    annotation$sampleID <- rownames(annotation)
+    # ...and it's not refering to an eixiting column...
+    if(!("sampleID" %in% colnames(annotation))) {
+      # ... make one
+      annotation$sampleID <- rownames(annotation)
+    }
   } # or else we're using the user specified column
 
   if(crosstalk::is.SharedData(data)) {
@@ -91,7 +105,7 @@ ContrApption <- function(
   }
 
 
-  # TODO: catch no usable targetCol here
+  # TODO: catch no usable targetCol/sampleCol here
   inputs = list(
     data = data,
     countsData = countsData,

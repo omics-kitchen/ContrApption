@@ -2,7 +2,7 @@
 % Please edit documentation in R/ContrApption.R
 \name{ContrApption}
 \alias{ContrApption}
-\title{<Add Title>}
+\title{ContrApption}
 \usage{
 ContrApption(
   data = NULL,
@@ -13,25 +13,40 @@ ContrApption(
   mode = "counts",
   plotName = "ContrApption",
   yAxisName = "Expression",
+  showLegend = FALSE,
   scaleWidth = 1
 )
 }
 \arguments{
-\item{data}{The dataset to visualize, where row names are features and each column is a sample.
-The column names of this input must match the rownames of the \code{annotation} file.}
+\item{data}{The main dataset to visualize, where row names are features and each column is a sample.
+Pass counts in dataframe to make a widget a simple counts widget. Pass a shared counts object to make an
+interactive counts widget for use with a counts table. Pass a shared data differential expression results
+table or an interactive boxplot and DE table. See the 'createContrApption' function for a simple wrapper
+that infers the correct widget to produce from the inputs - the reccomended method for basic usage.}
 
-\item{annotation}{The metadata on each sample (column in \code{data}) denoting which expermental group each
+\item{countsData}{The counts file - when using differential expression mode, use this argument to pass
+the counts as supplemental information so they can be visualized
 sample (column) the sample belongs to. The rownames of this must match the column names of `data.}
 
-\item{plotName}{A title for the plot. Defaults to "ContrApption"}
+\item{annotation}{The metadata on each sample (column in \code{data}) denoting which expermental group each}
 
-\item{yAxisName}{A title for the y axis. Defaults to NULL}
+\item{targetCol}{The string name in the numeric dataset of the column that has the names of the tagets
+in it, ie, transcripts or genes in an RNA-Seq experiment.}
 
-\item{scaleWidth}{Factor to multiply the width of the widget by. Defaults to 1.}
+\item{sampleCol}{The string name of the column in the annotation data that contains unique sample IDs.}
 
-\item{groupCol}{The column in the annotation file that contains the experimental factor on which to
-base the grouping of the input data.}
+\item{mode}{Counts mode or differential expression mode. See createContrApption function for a convineince
+function to infer the correct widget to create from inputs.}
+
+\item{plotName}{A title for the plot. Defaults to "ContrApption".}
+
+\item{yAxisName}{A title for the y axis. Defaults to Expression.}
+
+\item{showLegend}{Adds a basic legend to the plot. Defaults to FALSE.}
+
+\item{scaleWidth}{Factor to multiply the width of the widget by. Used decrease widget size for creating
+widgets from multiple sub-widgets with the bscols function from crosstalk. Defaults to 1.}
 }
 \description{
-<Add Description>
+Create interactive JavaScript widgets from single function call in R
 }

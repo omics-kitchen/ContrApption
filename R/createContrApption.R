@@ -1,7 +1,21 @@
 
-#' <Add Title>
+#' createContrApption
 #'
-#' <Add Description>
+#' A convinience wrapper that infers the type of ContrApption widget to create based on user the 
+#' dataset(s) passed. Produces a simple boxplot widget, a paired counts table and boxplot widget,
+#' or a paired differential expression table and boxplot widget.
+#' @import DT
+#' @param counts The counts to be visualized - see ContrApption function documentation for details.
+#' @param annotation The metadata about the samples in the experiment see ContrApption function 
+#' documentation for details.
+#' @param deResults The differential expression results of the experiment to be visualixed, if desired.
+#' @param plotName The title of the plot
+#' @param  yAxisName The y axis label to use
+#' @param targetCol The string name of the column in the counts data that contains the target names, ie
+#' the gene or transcript names in an RNA-Seq experiment.
+#' @param sampleCol The string name of the column in the annotation file that contains the unique IDs of
+#' the samples
+#' @param showLegend Adds legend to plot if true
 #' @export
 createContrApption <- function(
   counts, annotation,
@@ -11,7 +25,7 @@ createContrApption <- function(
   targetCol = "gene",
   sampleCol = "sampleID",
   showLegend = FALSE
-  )
+)
 {
   
   # if there is no de data and no shared objects, we're making a simple, single widget

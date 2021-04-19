@@ -2,7 +2,7 @@
 % Please edit documentation in R/createContrApption.R
 \name{createContrApption}
 \alias{createContrApption}
-\title{<Add Title>}
+\title{createContrApption}
 \usage{
 createContrApption(
   counts,
@@ -11,9 +11,32 @@ createContrApption(
   plotName = "ContrApption",
   yAxisName = "Expression",
   targetCol = "gene",
-  sampleCol = "sampleID"
+  sampleCol = "sampleID",
+  showLegend = FALSE
 )
 }
+\arguments{
+\item{counts}{The counts to be visualized - see ContrApption function documentation for details.}
+
+\item{annotation}{The metadata about the samples in the experiment see ContrApption function
+documentation for details.}
+
+\item{deResults}{The differential expression results of the experiment to be visualixed, if desired.}
+
+\item{plotName}{The title of the plot}
+
+\item{yAxisName}{The y axis label to use}
+
+\item{targetCol}{The string name of the column in the counts data that contains the target names, ie
+the gene or transcript names in an RNA-Seq experiment.}
+
+\item{sampleCol}{The string name of the column in the annotation file that contains the unique IDs of
+the samples}
+
+\item{showLegend}{Adds legend to plot if true}
+}
 \description{
-<Add Description>
+A convinience wrapper that infers the type of ContrApption widget to create based on user the
+dataset(s) passed. Produces a simple boxplot widget, a paired counts table and boxplot widget,
+or a paired differential expression table and boxplot widget.
 }
