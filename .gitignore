@@ -2,6 +2,7 @@
 ContrApption.Rproj
 Test.Rmd
 Develop.Rmd
+Develop.html
 *.nb.html
 dev/
 inst/doc
