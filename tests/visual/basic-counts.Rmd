@@ -1,0 +1,76 @@
+
+```{R}
+
+library(ContrApption)
+library(testthat)
+
+load("../basicDE-Experiment.Rds")
+
+# rownames(coldata) <- NULL
+
+createContrApption(counts = normCountsSig, annotation = coldata)
+```
+
+
+
+
+```{R}
+
+testRowAndColnamesMode1 <- function(data, annotation, sampleCol)
+{
+  
+  ### "the colnames of data don't match the rownames of annotation and you didn't tell me where else to look"
+  
+  # if we don't have rownames in the annotation file that match the column names of the data
+  # then we need the user to specify a sampleCol in the annotation file
+  if(!(identical(colnames(data), rownames(annotation)))){
+    # then we need the user to specify a sampleCol in the annotation file instead, but if it's
+    # not in the column names of the annotation file we need to bail
+    if(!(sampleCol %in% colnames(annotation))){
+      stop(
+        paste(
+          " The rownames of the annotation file do not match the column names of the",
+          "counts dataframe and no useable sampleCol was specified"
+        )
+      )
+    }
+    
+    ### ..."you did tell me where to look but the column there doesn't match either"
+    
+    # if they do specify something, we need to ensure that it matches
+    if(!(is.null(annotation[, c(sampleCol)]))){
+      if(!(identical(colnames(data), annotation[, c(sampleCol)]))){
+        stop(
+          paste(
+            "The values in the specified sample column of the annotation dataframe",
+            "do not match the column names of the counts dataframe."
+          )
+        )
+      }
+    }
+  }
+}
+testRowAndColnamesMode1(normCountsSig, coldata, "sampleID")
+```
+
+```{R}
+
+rownames(coldata) <- NULL
+testRowAndColnamesMode1(normCountsSig, coldata, "type")
+```
+```{R}
+
+rownames(coldata) <- NULL
+testRowAndColnamesMode1(normCountsSig, coldata, "sampleID")
+```
+
+```{R}
+
+test_that("single number", {
+  expect_warning({
+    rownames(coldata) <- NULL
+    createContrApption(counts = normCountsSig, annotation = coldata)
+  })
+})
+
+```

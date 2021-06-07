@@ -26,7 +26,8 @@ Imports:
     htmlwidgets,
     crosstalk,
     dplyr,
-    DT
+    DT,
+    log4r
 Suggests: 
     knitr,
     rmarkdown

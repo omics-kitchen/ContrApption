@@ -2,7 +2,7 @@
 #'
 #' Create interactive JavaScript widgets from single function call in R
 #'
-#' @import htmlwidgets crosstalk dplyr
+#' @import htmlwidgets crosstalk dplyr log4r
 #' @param data The main dataset to visualize, where row names are features and each column is a sample.
 #' Pass counts in dataframe to make a widget a simple counts widget. Pass a shared counts object to make an
 #' interactive counts widget for use with a counts table. Pass a shared data differential expression results

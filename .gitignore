@@ -13,3 +13,4 @@ Meta
 .Rhistory
 *.sh
 *.RData
+!ContrApptionQuickStart.RData

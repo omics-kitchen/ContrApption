@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{python}
+
+x = "Thadryan"
+```
+
+```{python}
+
+print(x)
+```
+
+```{python}
+
+def helloWorld(name):
+  return "Hello World from " + name
+```
+
+```{python}
+
+helloWorld("Lee")
+```
+
+```{R}
+
+plot(mtcars$mpg, mtcars$disp)
+```
