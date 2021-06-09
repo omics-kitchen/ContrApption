@@ -14,3 +14,4 @@ Meta
 *.sh
 *.RData
 !ContrApptionQuickStart.RData
+*.log
