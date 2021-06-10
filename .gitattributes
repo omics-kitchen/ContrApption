@@ -1,3 +1,4 @@
-docs/* linguist-vendored
-tests/* linguist-vendored
+docs/*.* linguist-vendored
+tests/*.* linguist-vendored
 Develop.html linguist-vendored
+tests/visual/basic-counts.html linguist-vendored
