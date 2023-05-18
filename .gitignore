@@ -1,6 +1,7 @@
 .Rproj.user
 ContrApption.Rproj
 Test.Rmd
+vignette.qmd
 Develop.Rmd
 Develop.html
 *.nb.html
